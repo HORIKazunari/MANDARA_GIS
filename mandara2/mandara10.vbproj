@@ -1576,6 +1576,16 @@
     <Content Include="mandara2googlemaps10\mandara2googlemap10.js" />
     <Content Include="mandara2googlemaps10\mandara2googlemap10_v22.js" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UserControlVer1001\UserControl\ktUserControl.vbproj">
+      <Project>{e349f89b-faf2-43c8-b5a6-536f907f60f9}</Project>
+      <Name>ktUserControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserControlVer1001\UserControl\UserControl.vbproj">
+      <Project>{7acf04cf-6626-426b-af88-95c132d02ef5}</Project>
+      <Name>UserControl</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
