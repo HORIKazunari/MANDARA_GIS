@@ -214,8 +214,8 @@ Public Class frmMain
         Me.Cursor = Cursors.Default
     End Sub
 
-
-    Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Try
         MANDARA10_datafolder = System.Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\MANDARA10"
         System.IO.Directory.SetCurrentDirectory(System.Environment.GetFolderPath(Environment.SpecialFolder.Personal))
         TileMapFolder = MANDARA10_datafolder + "\tilemap"
@@ -243,7 +243,12 @@ Public Class frmMain
         ReadJavaScript_kjmapdataJS()
 
         man_Data = enmDataSource.NoData
-        menu_Setting()
+        
+        ' Nullチェックを追加
+        If ProgressLabel IsNot Nothing AndAlso ProgressBar IsNot Nothing AndAlso pnlSettings IsNot Nothing Then
+            menu_Setting()
+        End If
+        
         Me.BackColor = pnlSettings.BackColor
         SetMDRFileHistorytoMenu()
         picTotalModeOverPanel.Visible = False
@@ -251,7 +256,12 @@ Public Class frmMain
         Frm_Print = New frmPrint
         Frm_Print.Pre_load()
         Me.Text = "MANDARA"
-    End Sub
+        
+    Catch ex As Exception
+        MessageBox.Show("初期化エラー: " & ex.Message & vbCrLf & ex.StackTrace, 
+                       "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Try
+End Sub
 
     ''' <summary>
     ''' 凡例初期色設定
