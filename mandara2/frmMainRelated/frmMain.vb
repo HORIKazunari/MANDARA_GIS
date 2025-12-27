@@ -2119,6 +2119,10 @@ End Sub
     ''' 
     ''' 
     Private Sub menu_Setting()
+        ' Nullチェックを追加
+        If ProgressLabel Is Nothing OrElse ProgressBar Is Nothing OrElse pnlSettings Is Nothing Then
+            Return
+        End If
         Dim fv1 As Boolean
 
         Select Case man_Data
