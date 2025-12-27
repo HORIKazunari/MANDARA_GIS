@@ -30,18 +30,20 @@ MANDARA10SourceCode10016.zip
 とりあえず MANDARA10.exe ファイルができるようになるよう
 最小限の変更にとどめる修正を行ったものです。
 
-（このソースコードの注意点）
-このソースコードは、谷謙二氏が書かれているように　
+（2025年12月のソースコード改良について）
+このソースコードのオリジナルは、谷謙二氏が書かれているように　
 「Microsoft Visual Basic 2013、.NET Framework 4.5で動作します」
 との記述に基づいて開発されています。
 Microsoft社は、 .NET Framework 4.5 のサポートを2022年4月26日に終了しています。
 サポート終了後は、セキュリティ対応やバグ修正がありません。
-本ソースコードの再ビルドに当たっては、.NET Framework 4.8 へ変更しています。
 
-また、本ソースコードの画面デザインは、Microsoft.VisualBasic.PowerPacks.Vs に依存しています。
-2024年3月時点において、Microsoft社はこのパッケージの利用を推奨しておらず、公式の配布は停止されています。
-Visual Studio 2022 には、Microsoft.VisualBasic.PowerPacks.Vs はインストールすることができず、
-そのため、このソースコードの画面デザインは Visual Studio 2022 では編集・変更することができません。
+今回、ソースコードに変更を加え、
+Visual Studio 2026 において、
+.NET Framework 4.8 に対応したx86 32bit ビルドが成功するように作業を行いました。
+
+以前のソースコードの画面デザインは、Microsoft.VisualBasic.PowerPacks.Vs に依存していましたが、
+Microsoft社はこのパッケージの利用を推奨しておらず、公式の配布は停止されています。
+今回、この PowerPacks への依存も排除するよう、変更作業をしました。
 
 [直近の作業背景]
 
