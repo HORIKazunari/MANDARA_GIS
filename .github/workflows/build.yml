@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # 手動実行を可能にする
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,16 +21,22 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
     
-    - name: Restore NuGet packages
-      run: nuget restore mandara10.sln
+    - name: Restore NuGet packages for UserControl
+      run: nuget restore UserControlVer1001\UserControl.sln
+      
+    - name: Build UserControl solution
+      run: msbuild UserControlVer1001\UserControl.sln /p:Configuration=Release /p:Platform="Any CPU" /p:WarningLevel=0
     
-    - name: Build solution
-      run: msbuild mandara10.sln /p:Configuration=Release /p:Platform=x86 /p:WarningLevel=0
+    - name: Restore NuGet packages for MANDARA10
+      run: nuget restore mandara2.sln
+    
+    - name: Build MANDARA10 solution
+      run: msbuild mandara2.sln /p:Configuration=Release /p:Platform=x86 /p:WarningLevel=0
       
     - name: List build output
       run: |
         Write-Host "Build completed. Checking output directory..."
-        Get-ChildItem -Path "mandara2\bin\Release" -Recurse
+        Get-ChildItem -Path "mandara2\bin\Release" -Recurse | Select-Object FullName
       shell: pwsh
     
     - name: Upload build artifacts
@@ -42,6 +48,7 @@ jobs:
           mandara2/bin/Release/*.dll
           mandara2/bin/Release/*.config
           mandara2/bin/Release/MarkShape.csv
+          mandara2/bin/Release/HELP/**/*
         if-no-files-found: error
     
     - name: Create release package
@@ -51,10 +58,53 @@ jobs:
         $releaseDir = "mandara2\bin\Release"
         $zipFile = "MANDARA10-v$version.zip"
         
-        # 必要なファイルを圧縮
-        Compress-Archive -Path "$releaseDir\MANDARA10.exe","$releaseDir\*.dll","$releaseDir\*.config","$releaseDir\MarkShape.csv" -DestinationPath $zipFile
+        # 必要なファイルを収集
+        $filesToInclude = @(
+          "$releaseDir\MANDARA10.exe",
+          "$releaseDir\*.dll",
+          "$releaseDir\*.config",
+          "$releaseDir\MarkShape.csv"
+        )
         
-        Write-Host "Created release package: $zipFile"
+        # HELPフォルダも含める
+        $helpFiles = Get-ChildItem -Path "$releaseDir\HELP" -Recurse -File
+        
+        # 存在するファイルのみを取得
+        $existingFiles = @()
+        foreach ($pattern in $filesToInclude) {
+          $files = Get-Item $pattern -ErrorAction SilentlyContinue
+          if ($files) {
+            $existingFiles += $files
+          }
+        }
+        
+        if ($existingFiles.Count -gt 0) {
+          # 一時フォルダを作成してファイルを配置
+          $tempDir = "MANDARA10_Release"
+          New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
+          
+          # ファイルをコピー
+          foreach ($file in $existingFiles) {
+            Copy-Item $file.FullName -Destination $tempDir
+          }
+          
+          # HELPフォルダをコピー
+          if (Test-Path "$releaseDir\HELP") {
+            Copy-Item -Path "$releaseDir\HELP" -Destination "$tempDir\HELP" -Recurse
+          }
+          
+          # ZIPファイルを作成
+          Compress-Archive -Path "$tempDir\*" -DestinationPath $zipFile -Force
+          
+          # 一時フォルダを削除
+          Remove-Item $tempDir -Recurse -Force
+          
+          Write-Host "Created release package: $zipFile"
+          Write-Host "Package size: $((Get-Item $zipFile).Length) bytes"
+        } else {
+          Write-Error "No files found to package"
+          exit 1
+        }
       shell: pwsh
     
     - name: Upload release package
@@ -63,3 +113,4 @@ jobs:
       with:
         name: MANDARA10-Package
         path: MANDARA10-v*.zip
+        if-no-files-found: error
