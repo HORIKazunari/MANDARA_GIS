@@ -3458,7 +3458,6 @@ Public Class KTGISGrid
     Private Sub Grid_Resize_MouseUp(ByVal X As Single, Y As Single)
         Dim S1 As Integer, s2 As Integer, T As Integer, TY As Integer, tx As Integer
         Dim w As Integer, H As Integer
-        Dim i As Integer
 
         With GridResize
             Select Case .Enable
