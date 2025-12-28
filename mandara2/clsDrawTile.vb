@@ -136,9 +136,9 @@
 
 
         Dim Interval As Integer
-        Dim makeRegion As Region
+        Dim makeRegion As Region = Nothing
         Dim OriginalClipRegion As Region = clsDraw.Set_Clipping_Region(g, polyn, pxy, nPolyP, makeRegion)
-        If OriginalClipRegion Is Nothing = False Then
+        If OriginalClipRegion IsNot Nothing Then
             With T
                 If .BGColFlag = True Then
                     clsDraw.DrawPolyPolygon(g, polyn, pxy, nPolyP, .BGCOLOR.getColor)
