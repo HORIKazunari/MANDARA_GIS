@@ -1,0 +1,65 @@
+name: Build MANDARA10
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # 手動実行を可能にする
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+    
+    - name: Restore NuGet packages
+      run: nuget restore mandara10.sln
+    
+    - name: Build solution
+      run: msbuild mandara10.sln /p:Configuration=Release /p:Platform=x86 /p:WarningLevel=0
+      
+    - name: List build output
+      run: |
+        Write-Host "Build completed. Checking output directory..."
+        Get-ChildItem -Path "mandara2\bin\Release" -Recurse
+      shell: pwsh
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: MANDARA10-Release
+        path: |
+          mandara2/bin/Release/MANDARA10.exe
+          mandara2/bin/Release/*.dll
+          mandara2/bin/Release/*.config
+          mandara2/bin/Release/MarkShape.csv
+        if-no-files-found: error
+    
+    - name: Create release package
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        $version = "10.0.1.6"
+        $releaseDir = "mandara2\bin\Release"
+        $zipFile = "MANDARA10-v$version.zip"
+        
+        # 必要なファイルを圧縮
+        Compress-Archive -Path "$releaseDir\MANDARA10.exe","$releaseDir\*.dll","$releaseDir\*.config","$releaseDir\MarkShape.csv" -DestinationPath $zipFile
+        
+        Write-Host "Created release package: $zipFile"
+      shell: pwsh
+    
+    - name: Upload release package
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-artifact@v4
+      with:
+        name: MANDARA10-Package
+        path: MANDARA10-v*.zip
