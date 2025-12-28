@@ -2525,6 +2525,7 @@ Public Class clsAttrData
     ''' <remarks></remarks>
     Public Function RemoveMapData(ByVal MapFileName As String)
         Me.MapData.RemoveMapData(MapFileName)
+        Return True
     End Function
     ''' <summary>
     ''' 既存地図ファイル追加
