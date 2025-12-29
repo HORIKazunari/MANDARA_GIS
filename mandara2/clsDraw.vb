@@ -503,8 +503,7 @@ Public Class clsDrawLine
 
         Dim e2 As PointF
 
-        Dim tva As Single, en As Single
-        Dim x2 As Single, y2 As Single
+        Dim tva As Single
         Dim sita As Single
         Dim VecX As Single = OP.X - BeforPoint.X
         Dim VecY As Single = OP.Y - BeforPoint.Y
@@ -619,7 +618,6 @@ Public Class clsDrawLine
         Dim Para_PolyXY() As Point
         Dim Para1_Points As Integer, Para2_Points As Integer
 
-        Dim Pst As Integer
         If nPoints = 0 Then
             Return
         End If
@@ -736,8 +734,6 @@ Public Class clsDrawLine
                                   ByRef LPat As Line_Property, ByRef CreatedPenHDC() As Pen,
                                   ByRef ScrData As Screen_info, ByRef basePic As BasePicture_Info)
         '任意の間隔のクロス線を引く
-
-        Dim MK As Mark_Property
 
         If P1.Equals(P2) = True Then
             Exit Sub
@@ -990,7 +986,6 @@ Public Class clsDrawLine
         'Length/平行移動の距離
         '出力／ox12,oy12,dx12,dy12/平行線の座標
         Dim V_VecX As Single, V_VecY As Single
-        Dim x2 As Single, y2 As Single
         Dim VecX As Integer, VecY As Integer
 
         VecX = dxy0.X - oxy0.X
