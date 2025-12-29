@@ -1,4 +1,4 @@
-﻿Public Class clsMeshContour
+Public Class clsMeshContour
     Public Structure ContourLineStacInfo
         Public Number As Integer
         Public PointStac As Integer
@@ -95,21 +95,25 @@
             'ProgressLabel.SetValue k + 1
             'DoEvents()
 
-            Dim PCell() As Integer
-            Dim n As Integer
+            ' 配列を初期化してから渡す
+            Dim PCell() As Integer = Nothing
+            Dim n As Integer = 0
             Dim High As Double = Contour_High_M(k) + ConValuePlus
             Call Get_Quad_MeshCell(High, PCell, 0, 0, n, max_PartitiopnLevel)
-            For i As Integer = 0 To n - 1
-                With Quad_MeshData(PCell(i)).Positon
-                    For j As Integer = .Left To .Right
-                        For k2 As Integer = .Top To .Bottom
-                            If Lack_Mesh(j, k2) = False Then
-                                Call Mesh_Sub(con, Mesh, j, k2, k, High, High_CN)
-                            End If
+
+            If PCell IsNot Nothing Then
+                For i As Integer = 0 To n - 1
+                    With Quad_MeshData(PCell(i)).Positon
+                        For j As Integer = .Left To .Right
+                            For k2 As Integer = .Top To .Bottom
+                                If Lack_Mesh(j, k2) = False Then
+                                    Call Mesh_Sub(con, Mesh, j, k2, k, High, High_CN)
+                                End If
+                            Next
                         Next
-                    Next
-                End With
-            Next
+                    End With
+                Next
+            End If
         Next
 
 
@@ -336,10 +340,10 @@
                 EY = YMeshNum - 1
         End Select
 
-
-        Dim vn As Integer
-        Dim VP() As PointF
-        Dim VPC() As Integer
+        ' 配列を初期化
+        Dim vn As Integer = 0
+        Dim VP() As PointF = Nothing
+        Dim VPC() As Integer = Nothing
 
         Select Case GetSide
             Case 0
@@ -352,12 +356,15 @@
                 vn = GetFrameSub(ContourNum, Contour_High_M, sx, EY, 1, 0, XMeshNum, VP, VPC)
         End Select
 
-        For i As Integer = 0 To vn - 1
-            With VP(i)
-                .X = Xplus + .X / (XMeshNum - 1) * XMeshSize
-                .Y = YPlus + .Y / (YMeshNum - 1) * YMeshSize
-            End With
-        Next
+        If VP IsNot Nothing Then
+            For i As Integer = 0 To vn - 1
+                With VP(i)
+                    .X = Xplus + .X / (XMeshNum - 1) * XMeshSize
+                    .Y = YPlus + .Y / (YMeshNum - 1) * YMeshSize
+                End With
+            Next
+        End If
+
         Frame_LineContour = VPC
         Frame_Point = VP
         Return vn
@@ -367,8 +374,11 @@
                                  ByVal LoopNum As Integer, ByRef Vpoint() As PointF, ByRef Vcon() As Integer) As Integer
 
 
+        ' 配列を初期化
         Dim SepV(10) As Single
         Dim VPC(10) As Integer
+        Dim VP(10) As PointF      ' 初期化済み
+        Dim VPC2(10) As Integer   ' 初期化済み
 
         '始終点のコンターの位置を取得
         Dim SPN As Integer = -1
@@ -421,8 +431,10 @@
 
         Dim SepVSort As New clsSortingSearch
         SepVSort.AddRange(VPN, SepV)
-        Dim VPC2(VPN) As Integer
-        Dim VP(VPN) As PointF
+
+        ' 配列のサイズを確保してから使用
+        ReDim VPC2(VPN - 1)
+        ReDim VP(VPN - 1)
 
         'コンターを並べ替える
         Dim n As Integer = 0
@@ -646,13 +658,12 @@
                                 mxv = .Max
                                 mnv = .Min
                                 f = False
-                            Else
-                                If mxv < .Max Then
-                                    mxv = .Max
-                                End If
-                                If .Min < mnv Then
-                                    mnv = .Min
-                                End If
+                            End If
+                            If mxv < .Max Then
+                                mxv = .Max
+                            End If
+                            If .Min < mnv Then
+                                mnv = .Min
                             End If
                         End If
                     End With
@@ -671,8 +682,8 @@
     Private Sub Get_Quad_MeshCell(ByVal V As Single, ByRef Qcell() As Integer, ByVal SpaceLevel As Integer, ByVal Scell As Integer, ByRef n As Integer, ByVal max_PartitiopnLevel As Integer)
         '四分木から等値せんにかかるメッシュを抜き出す再帰処理
 
-
         If SpaceLevel = 0 Then
+            ' 配列を初期化
             ReDim Qcell(TohiSuretu_no_Wa(1, 4, max_PartitiopnLevel) - 1)
             n = 0
             With Quad_MeshData(0)
