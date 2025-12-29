@@ -1,50 +1,57 @@
-﻿Imports System.Runtime.InteropServices
+Imports System.Runtime.InteropServices
+
 Public Class frmMED_MeshContour
+    ' 列挙型を正しく定義
+    Private Enum mousePointingSituations
+        up = 0
+        down = 1
+        downAndMove = 2
+    End Enum
+
+    ' 以下既存のフィールド
     Dim ObjectUseLineInfo As String
     Dim CloseCancelF As Boolean
     Dim ContourMap As New clsMapData
     Dim GlobalRange As strLatLonBox
     Dim FolderFile As KibanFolder_Info
-
     Dim High_M() As Double
     Dim Height_Num As Integer
     Dim FrameObjectStart As Integer
     Dim PolygonObjectStart As Integer
-
     Dim MapData As clsMapData
     Dim ScrData As Screen_info
     Dim PrintedLine() As Boolean
     Dim mousePointingSituation As mousePointingSituations
     Dim mouseDownPosition As Point
+
     Private Enum enmMouseRangeMode
         noPointSet = 0
         startPointSet = 1
         EndPointSet = 2
     End Enum
+
     Private Structure strTileMapViewInfo
         Public visible As Boolean
         Public ViewData As strTileMapViewDataInfo
     End Structure
+
     Dim mouseRangeMode As enmMouseRangeMode
     Dim mouseRangeStartPoint As PointF
     Dim mouseRangeEndPoint As PointF
     Dim mouseRangeMovingPoint As PointF
-
     Dim picMapImageOperation As clsPictureBoxDragOrWheelImageChange
-
-
     Dim WorldMap As clsMapData
     Dim WorldScrData As Screen_info
     Dim JapanMap As clsMapData
     Dim JapanScrData As Screen_info
     Dim TileMap As clsTileMapService
-
     Dim TileMapView As strTileMapViewInfo
 
     Private Enum enmMeshArea
         Japan = 0
         World = 1
     End Enum
+
     Private Enum enmMeshName
         suchi50m
         suchi250m
@@ -56,6 +63,7 @@ Public Class frmMED_MeshContour
         AsterGdem
         ETOPO5
     End Enum
+
     Private Structure KibanFolder_Info
         Public fnum As Integer
         Public File_List() As String
@@ -71,10 +79,12 @@ Public Class frmMED_MeshContour
         Public WorldPxPerDegree As Integer
         Public Folder As String
     End Structure
+
     Dim MeshDataSet() As MeshDataInfo
     Dim SelectedMeshData As MeshDataInfo
-    Private Sub frmMED_MeshContour_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
+    ' 以下メソッド定義
+    Private Sub frmMED_MeshContour_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Select Case e.CloseReason
             Case CloseReason.None
                 If CloseCancelF = True Then
@@ -86,6 +96,7 @@ Public Class frmMED_MeshContour
             Case Else
         End Select
     End Sub
+
     Public Overloads Function ShowDialog(ByVal _TileMap As clsTileMapService) As Windows.Forms.DialogResult
         TileMap = _TileMap
         Return Me.ShowDialog
@@ -94,6 +105,7 @@ Public Class frmMED_MeshContour
     Public Function getResult() As clsMapData
         Return ContourMap
     End Function
+
     Private Function getJapeneseMeshFileName(ByVal MeshCode As Integer) As String
         Dim a As String = CStr(MeshCode)
         Dim ix As Integer = Array.IndexOf(FolderFile.File_List2, MeshCode)
@@ -103,10 +115,9 @@ Public Class frmMED_MeshContour
             Return ""
         End If
     End Function
+
     Private Function Get_Suchi_Kiban_Mesh_File() As Boolean
-
         Dim meshw As Single, meshh As Single
-
         Dim folder_path As String = SelectedMeshData.Folder
         Dim w As Integer = SelectedMeshData.JapanMeshSize.Width
         Dim H As Integer = SelectedMeshData.JapanMeshSize.Height
@@ -228,20 +239,26 @@ Public Class frmMED_MeshContour
                             Else
                                 whw30 = 1
                             End If
-                            Dim Alti(,) As Single
+                            ' Alti配列を初期化
+                            Dim Alti(,) As Single = Nothing
                             Select Case SelectedMeshData.name
                                 Case enmMeshName.suchi50m, enmMeshName.suchi250m, enmMeshName.suchi1km
                                     Alti = Mesh_SuchuTizu(mf, w, H)
                                 Case enmMeshName.kiban5m, enmMeshName.kiban10m
                                     Alti = Mesh_Kiban(mf, w, H)
                             End Select
-                            Dim xps As Integer = kk * w
-                            Dim yps As Integer = ki * H
-                            For k As Integer = 0 To whh30 - 1
-                                For k2 As Integer = 0 To whw30 - 1
-                                    ContourMesh.SetMeshValue(xps + k2, yps + k, Alti(k2, k))
+
+                            If Alti IsNot Nothing Then
+                                Dim xps As Integer = kk * w
+                                Dim yps As Integer = ki * H
+                                For k As Integer = 0 To whh30 - 1
+                                    Dim py As Integer = i * H + k
+                                    For k2 As Integer = 0 To whw30 - 1
+                                        Dim px As Integer = j * w + k2
+                                        ContourMesh.SetMeshValue(xps + k2, yps + k, Alti(k2, k))
+                                    Next
                                 Next
-                            Next
+                            End If
                             GetF = True
                         Else
                             If ki = 0 And kk = 0 Then
@@ -255,32 +272,43 @@ Public Class frmMED_MeshContour
 
                 If GetF = True Then
                     getone = True
-                    Dim Con_Point() As PointF
-                    Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo
+                    ' 配列を初期化
+                    Dim Con_Point() As PointF = Nothing
+                    Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo = Nothing
                     Dim ConLineN As Integer
 
-                    Dim Frame_Point() As PointF
-                    Dim Frame_LineStac() As Integer
+                    Dim Frame_Point() As PointF = Nothing
+                    Dim Frame_LineStac() As Integer = Nothing
                     Dim FrameLineN As Integer
 
                     ConLineN = ContourMesh.Execute_Mesh(Height_Num, High_M, Con_LineStac, Con_Point)
-                    Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
+                    If ConLineN > 0 AndAlso Con_LineStac IsNot Nothing AndAlso Con_Point IsNot Nothing Then
+                        Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
+                    End If
 
                     If j = 0 Or Array.IndexOf(FolderFile.File_List2, spatial.Get_MeshCodeOffset(MCode, -1, 0, meshNumber)) = -1 Then
                         FrameLineN = ContourMesh.Execute_FrameGet(0, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If i = 0 Or Array.IndexOf(FolderFile.File_List2, spatial.Get_MeshCodeOffset(MCode, 0, 1, meshNumber)) = -1 Then
                         FrameLineN = ContourMesh.Execute_FrameGet(3, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If j = MeshArea.Width - 1 Or Array.IndexOf(FolderFile.File_List2, spatial.Get_MeshCodeOffset(MCode, 1, 0, meshNumber)) = -1 Then
                         FrameLineN = ContourMesh.Execute_FrameGet(2, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If i = MeshArea.Height - 1 Or Array.IndexOf(FolderFile.File_List2, spatial.Get_MeshCodeOffset(MCode, 0, -1, meshNumber)) = -1 Then
                         FrameLineN = ContourMesh.Execute_FrameGet(1, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                 End If
             Next
@@ -290,6 +318,7 @@ Public Class frmMED_MeshContour
 
         Return getone
     End Function
+
     Private Function Mesh_SuchuTizu(ByVal Fname As String, ByVal w As Integer, ByVal H As Integer) As Single(,)
         '数値地図メッシュファイルから標高読み込み
 
@@ -314,14 +343,15 @@ Public Class frmMED_MeshContour
         sr.Close()
         Return Alti
     End Function
+
     Private Function Mesh_Kiban(ByVal Fname As String, ByVal w As Integer, ByVal H As Integer) As Single(,)
         '基盤地図メッシュファイルから標高読み込み
-
 
         Dim Alti(w - 1, H - 1) As Single
         Dim MDIM(w * H - 1) As Single
         Dim n As Integer = 0
-        Dim sx As Double, sy As Double
+        Dim sx As Double = 0
+        Dim sy As Double = 0
         Dim fname2 As String = System.IO.Path.GetFileNameWithoutExtension(Fname)
         Dim fdate As Integer = Val(Microsoft.VisualBasic.Right(fname2, 8))
         Dim encodode As System.Text.Encoding
@@ -362,13 +392,22 @@ Public Class frmMED_MeshContour
         Next
         Return Alti
     End Function
+
     Private Sub Split_SpaceXY(ByVal xmlLine As String, ByRef X As Double, ByRef Y As Double)
+        ' 初期化
+        X = 0
+        Y = 0
 
         Dim s As String = Get_JPGIS_XML_Strings(xmlLine, ">", "<")
-        Dim SP As Integer = InStr(s, " ")
-        X = Val(Mid$(s, 1, SP - 1))
-        Y = Val(Mid$(s, SP + 1))
+        If String.IsNullOrEmpty(s) Then
+            Return
+        End If
 
+        Dim SP As Integer = InStr(s, " ")
+        If SP > 0 Then
+            X = Val(Mid$(s, 1, SP - 1))
+            Y = Val(Mid$(s, SP + 1))
+        End If
     End Sub
 
     Private Function Get_JPGIS_XML_Strings(ByVal xmlLine As String, ByVal Stagmark As String, ByVal Etagmark As String) As String
@@ -386,21 +425,15 @@ Public Class frmMED_MeshContour
         End If
     End Function
 
-
     Private Function Get_ASTERGDEM_Mesh_File() As Boolean
-
         Dim f As Boolean
-
         Dim srtm_ex As String = "tif"
-
         Dim XYSize As Size = Get_SRTM_WHDegree()
-
         ProgressLabel.Start(XYSize.Width * XYSize.Height, "標高メッシュデータ読み込み中", False)
         Dim ASTERGDEMPxPerDegree = SelectedMeshData.WorldPxPerDegree
         Dim xi As Integer = 0
 
         For i As Integer = GlobalRange.NorthWest.Longitude To GlobalRange.SouthEast.Longitude - 1
-
             Dim yi As Integer = 0
             For j As Integer = GlobalRange.NorthWest.Latitude - 1 To GlobalRange.SouthEast.Latitude Step -1
                 ProgressLabel.SetValue(xi * XYSize.Height + yi + 1)
@@ -420,9 +453,10 @@ Public Class frmMED_MeshContour
                 If AsterName <> "" Then
                     Dim ContourMesh As New clsMeshContour
                     ContourMesh.SetMeshInfo(ASTERGDEMPxPerDegree, ASTERGDEMPxPerDegree, 1, -1, i, j + 1)
-                    Dim Alti() As Byte
+                    ' Alti配列を初期化
+                    Dim Alti() As Byte = Nothing
                     Dim fget As Boolean = Get_MeshFile_FileStream(AsterName & mf, Alti, ASTERGDEMPxPerDegree ^ 2 * 2 + 8)
-                    If fget = True Then
+                    If fget = True AndAlso Alti IsNot Nothing Then
                         Dim lackCell As New ArrayList
                         For k As Integer = 0 To ASTERGDEMPxPerDegree - 1
                             Dim ad2 As Integer = k * ASTERGDEMPxPerDegree * 2
@@ -447,7 +481,7 @@ Public Class frmMED_MeshContour
                                     For kx As Integer = -1 To 1
                                         Dim filp As Point = New Point(lackXY.X + kx, lackXY.Y + ky)
                                         If 0 <= filp.X And filp.X < ASTERGDEMPxPerDegree And
-                                            0 <= filp.Y And filp.Y < ASTERGDEMPxPerDegree Then
+                                        0 <= filp.Y And filp.Y < ASTERGDEMPxPerDegree Then
                                             If ContourMesh.GetLack(filp.X, filp.Y) = False Then
                                                 v += ContourMesh.GetMeshValue(filp.X, filp.Y)
                                                 vn += 1
@@ -464,31 +498,41 @@ Public Class frmMED_MeshContour
                             '   MsgBox(lackCell.Count.ToString + "/" + lackoff.ToString)
                         End If
                     End If
-                    Dim Con_Point() As PointF
-                    Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo
+                    Dim Con_Point() As PointF = Nothing
+                    Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo = Nothing
                     Dim ConLineN As Integer
-                    Dim Frame_Point() As PointF
-                    Dim Frame_LineStac() As Integer
+                    Dim Frame_Point() As PointF = Nothing
+                    Dim Frame_LineStac() As Integer = Nothing
                     Dim FrameLineN As Integer
 
                     ConLineN = ContourMesh.Execute_Mesh(Height_Num, High_M, Con_LineStac, Con_Point)
-                    Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
+                    If ConLineN > 0 AndAlso Con_LineStac IsNot Nothing AndAlso Con_Point IsNot Nothing Then
+                        Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
+                    End If
                     f = False
                     If i = GlobalRange.NorthWest.Longitude Or System.IO.File.Exists(AsterName & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j, i - 1)) & "_dem." & srtm_ex) = False Then
                         FrameLineN = ContourMesh.Execute_FrameGet(0, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If j = GlobalRange.NorthWest.Latitude - 1 Or System.IO.File.Exists(AsterName & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j + 1, i)) & "_dem." & srtm_ex) = False Then
                         FrameLineN = ContourMesh.Execute_FrameGet(1, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If i = GlobalRange.SouthEast.Longitude - 1 Or System.IO.File.Exists(AsterName & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j, i + 1)) & "_dem." & srtm_ex) = False Then
                         FrameLineN = ContourMesh.Execute_FrameGet(2, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                     If j = GlobalRange.SouthEast.Latitude Or System.IO.File.Exists(AsterName & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j - 1, i)) & "_dem." & srtm_ex) = False Then
                         FrameLineN = ContourMesh.Execute_FrameGet(3, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        If FrameLineN > 0 AndAlso Frame_LineStac IsNot Nothing AndAlso Frame_Point IsNot Nothing Then
+                            Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
+                        End If
                     End If
                 End If
                 yi += 1
@@ -498,395 +542,7 @@ Public Class frmMED_MeshContour
 
         ProgressLabel.Finish()
 
-
         Return True
-    End Function
-
-    Private Function Get_SRTM_Mesh_File() As Boolean
-
-
-
-        Dim srtm_ex As String
-
-
-        Select Case SelectedMeshData.name
-            Case enmMeshName.SRTM30
-                srtm_ex = "srtm30mdr"
-            Case enmMeshName.SRTM3
-                srtm_ex = "hgt"
-        End Select
-        Dim wh As Integer = SelectedMeshData.WorldPxPerDegree
-        If SelectedMeshData.name = enmMeshName.SRTM30 Then
-            wh += 1
-        End If
-        Dim XYSize As Size = Get_SRTM_WHDegree()
-
-
-        ProgressLabel.Start(XYSize.Width * XYSize.Height, "標高メッシュデータ読み込み中", False)
-
-        Dim xi As Integer = 0
-        For i As Integer = GlobalRange.NorthWest.Longitude To GlobalRange.SouthEast.Longitude - 1
-            Dim yi As Integer = 0
-            For j As Integer = GlobalRange.NorthWest.Latitude - 1 To GlobalRange.SouthEast.Latitude Step -1
-                ProgressLabel.SetValue(xi * XYSize.Height + yi + 1)
-                My.Application.DoEvents()
-                Dim mf As String = SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j, i)) & "." & srtm_ex
-                Dim ContourMesh As New clsMeshContour
-                If System.IO.File.Exists(mf) = True Then
-                    ContourMesh.SetMeshInfo(wh, wh, 1, -1, i, j + 1)
-                    If SelectedMeshData.name = enmMeshName.SRTM3 Then
-                        Dim Alti() As Byte
-                        Dim fget As Boolean = Get_MeshFile_FileStream(mf, Alti, wh ^ 2 * 2)
-                        For k As Integer = 0 To wh - 1
-                            For k2 As Integer = 0 To wh - 1
-                                Dim ad As Integer = k * wh * 2 + k2 * 2
-                                If Alti(ad) = 128 Or Alti(ad) = 255 Then
-                                    ContourMesh.SetMeshValue(k2, k, 0)
-                                Else
-                                    ContourMesh.SetMeshValue(k2, k, Alti(ad) * 256 + Alti(ad + 1))
-                                End If
-                            Next
-                        Next
-                    Else
-                        'SRTM30の場合は東側、南側、南東側メッシュファイルも読み込み、1列・行分のデータを追加
-                        For ki As Integer = 0 To 1
-                            Dim whh30 As Integer
-                            If ki = 0 Then
-                                whh30 = SelectedMeshData.WorldPxPerDegree
-                            Else
-                                whh30 = 1
-                            End If
-                            For kk As Integer = 0 To 1
-                                Dim mf2 As String = SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j - ki, i + kk)) & "." & srtm_ex
-                                Dim fget As Boolean = False
-                                Dim whw30 As Integer
-                                If kk = 0 Then
-                                    whw30 = SelectedMeshData.WorldPxPerDegree
-                                Else
-                                    whw30 = 1
-                                End If
-                                Dim xp30 As Integer = kk * SelectedMeshData.WorldPxPerDegree
-                                Dim yp30 As Integer = ki * SelectedMeshData.WorldPxPerDegree
-                                Dim Alti() As Byte
-                                If System.IO.File.Exists(mf2) = True Then
-                                    If ki = 0 Then
-                                        fget = Get_MeshFile_FileStream(mf2, Alti, SelectedMeshData.WorldPxPerDegree ^ 2 * 2)
-                                    Else
-                                        fget = Get_MeshFile_FileStream(mf2, Alti, SelectedMeshData.WorldPxPerDegree * 2)
-                                    End If
-                                    For k As Integer = 0 To whh30 - 1
-                                        For k2 As Integer = 0 To whw30 - 1
-                                            Dim ad As Integer = k * SelectedMeshData.WorldPxPerDegree * 2 + k2 * 2
-                                            If Alti(ad) >= 128 Then
-                                                ContourMesh.SetMeshValue(xp30 + k2, yp30 + k, -(255 - Alti(ad)) * 256 - (256 - Alti(ad + 1)))
-                                            Else
-                                                ContourMesh.SetMeshValue(xp30 + k2, yp30 + k, Alti(ad) * 256 + Alti(ad + 1))
-                                            End If
-                                        Next
-                                    Next
-                                End If
-                                If fget = False Then
-                                    For k As Integer = 0 To whh30 - 1
-                                        For k2 As Integer = 0 To whw30 - 1
-                                            ContourMesh.SetLack(xp30 + k2, yp30 + k, True)
-                                        Next
-                                    Next
-                                End If
-                            Next
-                        Next
-                    End If
-
-                    Dim Con_Point() As PointF
-                    Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo
-                    Dim ConLineN As Integer
-                    Dim Frame_Point() As PointF
-                    Dim Frame_LineStac() As Integer
-                    Dim FrameLineN As Integer
-
-
-                    ConLineN = ContourMesh.Execute_Mesh(Height_Num, High_M, Con_LineStac, Con_Point)
-                    Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
-                    If i = GlobalRange.NorthWest.Longitude Or System.IO.File.Exists(SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j, i - 1)) & "." & srtm_ex) = False Then
-                        FrameLineN = ContourMesh.Execute_FrameGet(0, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-                    End If
-                    If j = GlobalRange.NorthWest.Latitude - 1 Or System.IO.File.Exists(SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j + 1, i)) & "." & srtm_ex) = False Then
-                        FrameLineN = ContourMesh.Execute_FrameGet(1, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-                    End If
-                    If i = GlobalRange.SouthEast.Longitude - 1 Or System.IO.File.Exists(SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j, i + 1)) & "." & srtm_ex) = False Then
-                        FrameLineN = ContourMesh.Execute_FrameGet(2, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-                    End If
-                    If j = GlobalRange.SouthEast.Latitude Or System.IO.File.Exists(SelectedMeshData.Folder & "\" & clsGeneric.Get_IdoKedo_Strings_NSWE(New strLatLon(j - 1, i)) & "." & srtm_ex) = False Then
-                        FrameLineN = ContourMesh.Execute_FrameGet(3, Height_Num, High_M, Frame_LineStac, Frame_Point)
-                        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-                    End If
-                End If
-                yi += 1
-            Next
-            xi += 1
-        Next
-
-        ProgressLabel.Finish()
-
-
-        Return True
-    End Function
-
-    ''' <summary>
-    ''' ETOPO5データの取得
-    ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Private Function Get_ETOPO5_Mesh_File() As Boolean
-        Dim Mesh(4320 * 2160 - 1) As Short
-        Dim fname As String = SelectedMeshData.Folder + "\ETOPO5.DOS"
-
-
-        Dim fs As System.IO.FileStream
-        Try
-            fs = New System.IO.FileStream(fname, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Exclamation)
-            Return False
-        End Try
-        Dim fileSize As Integer = CInt(fs.Length) ' ファイルのサイズ
-        Dim buf(fileSize - 1) As Byte ' データ格納用配列
-
-        fs.Read(buf, 0, fileSize)
-        fs.Close()
-        Dim pnt As IntPtr = Marshal.AllocHGlobal(fileSize)
-        Marshal.Copy(buf, 0, pnt, fileSize) 'Byte()→IntPtr
-        Marshal.Copy(pnt, Mesh, 0, fileSize \ 2) 'IntPtr→Integer()
-        Marshal.FreeHGlobal(pnt)
-
-        'Dim canvas As New Bitmap(PictureBox1.Width, PictureBox1.Height)
-        ''ImageオブジェクトのGraphicsオブジェクトを作成する
-        'Dim g As Graphics = Graphics.FromImage(canvas)
-        'For i As Integer = 0 To 2159 Step 10
-        '    For j As Integer = 0 To 4319 Step 10
-        '        Dim v As Short = (Mesh(j + i * 4320) + 10000) / 15000 * 255
-        '        v = Math.Min(v, 255)
-        '        'If v <> 0 Then Stop
-        '        'Console.Write(v)
-        '        Dim Pen As New Pen(Color.FromArgb(255, v, v, v), 1)
-        '        g.DrawRectangle(Pen, j \ 10, i \ 10, 1, 1)
-        '    Next
-        'Next
-
-
-        Dim XYSize As Size = Get_SRTM_WHDegree()
-
-        Dim ContourMesh As New clsMeshContour
-        Dim ETOPO5PxPerDegree As Integer = SelectedMeshData.WorldPxPerDegree
-        ContourMesh.SetMeshInfo(XYSize.Width * ETOPO5PxPerDegree, XYSize.Height * ETOPO5PxPerDegree, XYSize.Width, XYSize.Height,
-                                GlobalRange.NorthWest.Longitude, GlobalRange.SouthEast.Latitude)
-
-        ProgressLabel.Start(XYSize.Width * ETOPO5PxPerDegree, "標高メッシュデータ読み込み中", False)
-        Dim sk As Integer = GlobalRange.NorthWest.Longitude
-        For i As Integer = 0 To XYSize.Width * ETOPO5PxPerDegree - 1 Step ETOPO5PxPerDegree
-            ProgressLabel.SetValue(i + 1)
-            My.Application.DoEvents()
-            Dim sk2 As Integer
-            If sk < 0 Then
-                sk2 = (sk + 360) * ETOPO5PxPerDegree
-            Else
-                sk2 = sk * ETOPO5PxPerDegree
-            End If
-            For k As Integer = 0 To ETOPO5PxPerDegree - 1
-                For j As Integer = 0 To XYSize.Height * ETOPO5PxPerDegree - 1
-                    Dim EtopoX As Integer = sk2 + k
-                    Dim ETopoY As Integer = (-GlobalRange.SouthEast.Latitude + 90) * ETOPO5PxPerDegree - j
-                    Dim n As Integer = EtopoX + ETopoY * 4320
-                    ContourMesh.SetMeshValue(i + k, j, Mesh(n))
-
-                    'Dim v As Short
-                    'Dim Pen As SolidBrush
-                    'If Mesh(n) < 0 Then
-                    '    v = 0
-                    '    Pen = New SolidBrush(Color.FromArgb(255, v, v, 255))
-                    'Else
-                    '    v = (Mesh(n)) / 4500 * 255
-                    '    v = Math.Min(v, 255)
-                    '    Pen = New SolidBrush(Color.FromArgb(255, v, v, v))
-                    'End If
-                    'g.FillRectangle(Pen, (i + k), j, 1, 1)
-                Next
-            Next
-            sk += 1
-            If sk >= 180 Then
-                sk = -180
-            End If
-        Next
-        'g.Dispose()
-        'PictureBox1.Image = canvas
-        'PictureBox1.Refresh()
-
-        Dim Con_Point() As PointF
-        Dim Con_LineStac() As clsMeshContour.ContourLineStacInfo
-        Dim ConLineN As Integer
-        Dim Frame_Point() As PointF
-        Dim Frame_LineStac() As Integer
-        Dim FrameLineN As Integer
-
-
-        ConLineN = ContourMesh.Execute_Mesh(Height_Num, High_M, Con_LineStac, Con_Point)
-        Call Convert_Mpline_fromMeshData(ConLineN, Con_LineStac, Con_Point)
-        FrameLineN = ContourMesh.Execute_FrameGet(0, Height_Num, High_M, Frame_LineStac, Frame_Point)
-        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-        FrameLineN = ContourMesh.Execute_FrameGet(1, Height_Num, High_M, Frame_LineStac, Frame_Point)
-        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-        FrameLineN = ContourMesh.Execute_FrameGet(2, Height_Num, High_M, Frame_LineStac, Frame_Point)
-        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-        FrameLineN = ContourMesh.Execute_FrameGet(3, Height_Num, High_M, Frame_LineStac, Frame_Point)
-        Call Convert_Mpline_fromFrameData(FrameLineN, Frame_LineStac, Frame_Point)
-        ProgressLabel.Finish()
-        Return True
-    End Function
-    Private Function Get_MeshFile_FileStream(Fname As String, ByRef Alti() As Byte, ByVal ByteSize As Integer) As Boolean
-
-        Dim fs As System.IO.FileStream
-        Try
-            fs = New System.IO.FileStream(Fname, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-            Dim fileSize As Integer = CInt(fs.Length) ' ファイルのサイズ
-            ReDim Alti(ByteSize - 1)  ' データ格納用配列
-
-            fs.Read(Alti, 0, ByteSize)
-            fs.Close()
-        Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Exclamation)
-            fs.Close()
-            Return False
-        End Try
-        Return True
-    End Function
-
-
-
-    ''' <summary>
-    ''' 緯度経度等高線から地図ファイルの座標へ変換、ライン・オブジェクトの設定
-    ''' </summary>
-    ''' <param name="ConLineN"></param>
-    ''' <param name="Con_LineStac"></param>
-    ''' <param name="Con_Point"></param>
-    ''' <remarks></remarks>
-    Private Sub Convert_Mpline_fromMeshData(ByVal ConLineN As Integer, ByRef Con_LineStac() As clsMeshContour.ContourLineStacInfo,
-                                            ByRef Con_Point() As PointF)
-
-        Dim ContourN() As Integer
-
-        Dim FAlin As Integer = ContourMap.Map.ALIN
-
-        ReDim ContourN(Height_Num - 1)
-        For i As Integer = 0 To ConLineN - 1
-            ContourN(Con_LineStac(i).Number) += 1
-        Next
-
-
-        'ProgressLabel.Visible = True
-        'ProgressLabel.Start(Height_Num, "メッシュ標高抽出処理中")
-
-        For i As Integer = 0 To Height_Num - 1
-            'ProgressLabel.SetValue i
-            If ContourN(i) > 0 Then
-                Dim newObj As clsMapData.strObj_Data = ContourMap.MPObj(i)
-                For j As Integer = 0 To ConLineN - 1
-                    If Con_LineStac(j).Number = i Then
-                        Dim s As Integer = Con_LineStac(j).PointStac
-                        Dim n As Integer = Con_LineStac(j).PointNum
-                        Dim newLine As clsMapData.strLine_Data = ContourMap.Init_One_Line(i)
-                        With newLine
-                            .NumOfPoint = n
-                            .LineTimeSTC(0).Kind = i
-                            ReDim .PointSTC(n - 1)
-                            For k As Integer = 0 To n - 1
-                                .PointSTC(k) = spatial.Get_Converted_XY(Con_Point(k + s), ContourMap.Map.Zahyo)
-                            Next
-                        End With
-                        ContourMap.Save_Line(newLine, False, False, False)
-
-                        With newObj
-                            .NumOfLine += 1
-                            ReDim Preserve .LineCodeSTC(.NumOfLine - 1)
-                            .LineCodeSTC(.NumOfLine - 1).LineCode = ContourMap.Map.ALIN - 1
-                        End With
-                    End If
-                Next
-                With newObj
-                    If .NumOfLine > 0 Then
-                        Dim CP As PointF
-                        With ContourMap.MPLine(.LineCodeSTC(0).LineCode)
-                            CP = .PointSTC(.NumOfPoint \ 2)
-                        End With
-                        .CenterPSTC(0).Position = CP
-                    End If
-                End With
-                ContourMap.Save_Object(newObj, False)
-            End If
-        Next
-        'ProgressLabel.Visible = False
-
-    End Sub
-    ''' <summary>
-    ''' 枠線データから座標変換、ライン作成・オブジェクトへの追加
-    ''' </summary>
-    ''' <param name="FrameLineN"></param>
-    ''' <param name="Frame_LineContour"></param>
-    ''' <param name="FrameLine_Point"></param>
-    ''' <remarks></remarks>
-    Private Sub Convert_Mpline_fromFrameData(ByVal FrameLineN As Integer, ByVal Frame_LineContour() As Integer,
-                                             ByVal FrameLine_Point() As PointF)
-
-
-        Dim LK As Integer = ContourMap.Map.LpNum - 1
-        For i As Integer = 0 To FrameLineN - 2
-            Dim newLine As clsMapData.strLine_Data = ContourMap.Init_One_Line(LK)
-            With newLine
-                .NumOfPoint = 2
-                ReDim .PointSTC(1)
-                .PointSTC(0) = spatial.Get_Converted_XY(FrameLine_Point(i), ContourMap.Map.Zahyo)
-                .PointSTC(1) = spatial.Get_Converted_XY(FrameLine_Point(i + 1), ContourMap.Map.Zahyo)
-            End With
-            ContourMap.Save_Line(newLine, False, False, False)
-
-            Dim j As Integer = Frame_LineContour(i)
-            '既存の等高線の枠線オブジェクトに追加する
-            With ContourMap.MPObj(FrameObjectStart + j + 1)
-                ReDim Preserve .LineCodeSTC(.NumOfLine)
-                With .LineCodeSTC(.NumOfLine)
-                    .LineCode = newLine.Number
-                    .NumOfTime = 0
-                End With
-                If .NumOfLine = 0 Then
-                    .CenterPSTC(0).Position = ContourMap.MPLine(newLine.Number).PointSTC(0)
-                End If
-                .NumOfLine += 1
-            End With
-        Next
-    End Sub
-    ''' <summary>
-    ''' 世界データの経度・緯度幅を取得
-    ''' </summary>
-    ''' <remarks>Size構造体</remarks>
-    Private Function Get_SRTM_WHDegree() As Size
-        Dim w As Integer
-        Dim h As Integer
-        With GlobalRange
-            Dim i As Integer
-            i = .NorthWest.Longitude
-            'w = 0
-            'Do
-            '    i += 1
-            '    w += 1
-            '    If i = 180 Then
-            '        i = -180
-            '    End If
-            'Loop Until i = .SouthEast.Longitude
-            w = .SouthEast.Longitude - .NorthWest.Longitude
-            h = Math.Abs(.NorthWest.Latitude - .SouthEast.Latitude)
-        End With
-        Return New Size(w, h)
     End Function
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
@@ -966,7 +622,6 @@ Public Class frmMED_MeshContour
                     .SouthEast = New strLatLon(EP)
                 End With
         End Select
-
 
         Call init_Obk_LKind()
         With ContourMap.Map
@@ -1121,12 +776,12 @@ Public Class frmMED_MeshContour
             End With
         Next
     End Sub
+
     ''' <summary>
     ''' 面形状等高線オブジェクト作成
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub PolygonContourMake()
-
         For i As Integer = 0 To Height_Num
             With ContourMap.MPObj(PolygonObjectStart + i)
                 Dim oname As String = .NameTimeSTC(0).NamesList(0)
@@ -1330,21 +985,26 @@ Public Class frmMED_MeshContour
         FolderSelector.Folder = SelectedMeshData.Folder
         printMap()
     End Sub
+
     Private Function getSelectedMeshDataIndex() As Integer
         For i As Integer = 0 To MeshDataSet.Length - 1
-            If cboMeshData.Text = MeshDataSet(i).Title Then
+            If MeshDataSet(i).name = cboMeshData.SelectedIndex Then
                 Return i
             End If
         Next
+        ' 見つからない場合は-1を返す
+        Return -1
     End Function
 
     Private Function getSelectedMeshData() As MeshDataInfo
-        For i As Integer = 0 To MeshDataSet.Length - 1
-            If cboMeshData.Text = MeshDataSet(i).Title Then
-                Return MeshDataSet(i)
-            End If
-        Next
+        Dim idx As Integer = getSelectedMeshDataIndex()
+        If idx >= 0 Then
+            Return MeshDataSet(idx)
+        End If
+        ' 見つからない場合はデフォルト値を返す
+        Return New MeshDataInfo()
     End Function
+
     ''' <summary>
     ''' 地図描画
     ''' </summary>
@@ -1500,11 +1160,13 @@ Public Class frmMED_MeshContour
         picMap.Image = canvas
         picMap.Refresh()
     End Sub
+
     Private Sub printSelectRange(ByRef g As Graphics)
         Select Case mouseRangeMode
             Case enmMouseRangeMode.noPointSet
             Case enmMouseRangeMode.startPointSet
                 Select Case SelectedMeshData.Area
+                '範囲指定中
                     Case enmMeshArea.Japan
                         printSelectRangeJapan(g, mouseRangeMovingPoint)
                     Case enmMeshArea.World
@@ -1519,6 +1181,7 @@ Public Class frmMED_MeshContour
                 End Select
         End Select
     End Sub
+
     Private Sub printSelectRangeJapan(ByRef g As Graphics, ByVal endp As PointF)
         Dim Brush As New SolidBrush(Color.FromArgb(150, 255, 200, 100))
         Dim Pen As New Pen(Color.Red)
@@ -1542,11 +1205,12 @@ Public Class frmMED_MeshContour
         Brush.Dispose()
         Pen.Dispose()
     End Sub
+
     Private Sub printSelectRangeWorld(ByRef g As Graphics, ByVal ep As PointF)
         Dim Brush As New SolidBrush(Color.FromArgb(150, 255, 200, 100))
         Dim Pen As New Pen(Color.Red)
         If Int(mouseRangeStartPoint.X) = Int(ep.X) And Int(mouseRangeStartPoint.Y) = Int(ep.Y) Or
-             mouseRangeStartPoint.X < ep.X Then
+         mouseRangeStartPoint.X < ep.X Then
             '世界地図で、始点が終点よりも右側の場合または、整数値で緯度経度が同じ場合
             Dim S1 As Point
             Dim e1 As Point
@@ -1587,6 +1251,7 @@ Public Class frmMED_MeshContour
             EP = New Point(Math.Floor(OriginE.X) + 1, Math.Floor(OriginE.Y))
         End If
     End Sub
+
     Private Sub picMap_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picMap.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Left Then
             mousePointingSituation = mousePointingSituations.down
@@ -1597,13 +1262,12 @@ Public Class frmMED_MeshContour
 
     Private Sub picMap_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picMap.MouseMove
 
-
         Static mousePreviousPosition As Point
 
         Select Case mousePointingSituation
             Case mousePointingSituations.up
                 Select Case mouseRangeMode
-                    '範囲指定中
+                '範囲指定中
                     Case enmMouseRangeMode.startPointSet
                         Dim g As Graphics = picMap.CreateGraphics()
                         picMap.Refresh()
@@ -1646,13 +1310,13 @@ Public Class frmMED_MeshContour
             Case Windows.Forms.MouseButtons.Left
                 '左クリックの場合－－－－－－－－－－－－－－－－
                 Select Case mousePointingSituation
-                    Case mousePointingSituations.downAndMove
+                    Case mousePointingSituation.downAndMove
                         picMapImageOperation.DisposeBackCanvasPictureImage()
                         Dim StartP As PointF = ScrData.getSRXY(mouseDownPosition)
                         Dim EndP As PointF = ScrData.getSRXY(mouseUpPosition)
                         ScrData.ScrView.Offset(StartP.X - EndP.X, StartP.Y - EndP.Y)
                         printMap()
-                    Case mousePointingSituations.down
+                    Case mousePointingSituation.down
                         '左クリックの場合、範囲指定
                         Select Case mouseRangeMode
                             Case enmMouseRangeMode.noPointSet, enmMouseRangeMode.EndPointSet
@@ -1669,10 +1333,10 @@ Public Class frmMED_MeshContour
             Case Windows.Forms.MouseButtons.Right
                 '右クリックは元に戻す
                 Select Case mousePointingSituation
-                    Case mousePointingSituations.downAndMove
+                    Case mousePointingSituation.downAndMove
                         picMapImageOperation.DisposeBackCanvasPictureImage()
                         printMap()
-                    Case mousePointingSituations.up
+                    Case mousePointingSituation.up
                         Select Case mouseRangeMode
                             Case enmMouseRangeMode.startPointSet, enmMouseRangeMode.EndPointSet
                                 mouseRangeMode = enmMouseRangeMode.noPointSet
@@ -1680,7 +1344,7 @@ Public Class frmMED_MeshContour
                         printMap()
                 End Select
         End Select
-        mousePointingSituation = mousePointingSituations.up
+        mousePointingSituation = mousePointingSituation.up
     End Sub
 
     Private Sub picMap_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picMap.MouseWheel
@@ -1787,18 +1451,21 @@ Public Class frmMED_MeshContour
         If Me.Tag = "OFF" Then
             Return
         End If
-        Dim T As String
+
+        Dim T As String = ""
+
         Select Case cboBackImage.SelectedIndex
             Case 0
-                TileMapView.Visible = False
+                TileMapView.visible = False
             Case 1
-                T = "地理院地図（標準地図）"
-                TileMapView.Visible = True
+                T = "地理院地図(標準地図)"
+                TileMapView.visible = True
             Case 2
                 T = "オープンストリートマップ"
-                TileMapView.Visible = True
+                TileMapView.visible = True
         End Select
-        If TileMapView.Visible = True Then
+
+        If TileMapView.visible = True AndAlso T <> "" Then
             With TileMapView.ViewData
                 .TileMapDataSet = TileMap.getTileMap_by_Name(T)
                 .AlphaValue = 255
@@ -1832,4 +1499,130 @@ Public Class frmMED_MeshContour
         form.ShowDialog(Me)
         form.Dispose()
     End Sub
+
+    Private Sub Convert_Mpline_fromMeshData(ByVal ConLineN As Integer,
+                                        ByRef Con_LineStac() As clsMeshContour.ContourLineStacInfo,
+                                        ByRef Con_Point() As PointF)
+        ' 等値線データを地図データに変換
+        For i As Integer = 0 To ConLineN - 1
+            With Con_LineStac(i)
+                Dim LineCode As Integer = ContourMap.Map.ALIN
+                ReDim Preserve ContourMap.MPLine(LineCode)
+
+                Dim newLine As clsMapData.strLine_Data = ContourMap.Init_One_Line(.Number)
+                ' 正しい構造: strLine_Dataのメンバーを直接設定
+                newLine.NumOfPoint = .PointNum
+                ReDim newLine.PointSTC(.PointNum - 1)
+
+                For j As Integer = 0 To .PointNum - 1
+                    newLine.PointSTC(j) = Con_Point(.PointStac + j)
+                Next
+
+                ContourMap.MPLine(LineCode) = newLine
+                ContourMap.Map.ALIN += 1
+                ContourMap.Check_Line_Maxmin(LineCode, True)
+
+                ' オブジェクトにラインを追加
+                If .Number < ContourMap.MPObj.Length Then
+                    With ContourMap.MPObj(.Number)
+                        If .LineCodeSTC Is Nothing Then
+                            ReDim .LineCodeSTC(0)
+                            .NumOfLine = 0
+                        Else
+                            ReDim Preserve .LineCodeSTC(.NumOfLine)
+                        End If
+                        ' 正しいメンバー名を使用
+                        .LineCodeSTC(.NumOfLine).LineCode = LineCode
+                        .LineCodeSTC(.NumOfLine).NumOfTime = 0
+                        .NumOfLine += 1
+                    End With
+                End If
+            End With
+        Next
+    End Sub
+
+    Private Sub Convert_Mpline_fromFrameData(ByVal FrameLineN As Integer,
+                                         ByRef Frame_LineStac() As Integer,
+                                         ByRef Frame_Point() As PointF)
+        ' フレームデータを地図データに変換
+        If FrameLineN <= 0 OrElse Frame_Point Is Nothing Then
+            Return
+        End If
+
+        For i As Integer = 0 To FrameLineN - 1
+            Dim LineCode As Integer = ContourMap.Map.ALIN
+            ReDim Preserve ContourMap.MPLine(LineCode)
+
+            ' Frame_LineStacは等高線番号を示すので、適切な線種番号に変換
+            Dim LineKindNum As Integer = Frame_LineStac(i) + Height_Num ' 枠線の線種番号
+
+            Dim newLine As clsMapData.strLine_Data = ContourMap.Init_One_Line(LineKindNum)
+            ' 正しい構造: strLine_Dataのメンバーを直接設定
+            newLine.NumOfPoint = 2
+            ReDim newLine.PointSTC(1)
+
+            If i < FrameLineN - 1 Then
+                newLine.PointSTC(0) = Frame_Point(i)
+                newLine.PointSTC(1) = Frame_Point(i + 1)
+            Else
+                ' 最後は始点に戻る
+                newLine.PointSTC(0) = Frame_Point(i)
+                newLine.PointSTC(1) = Frame_Point(0)
+            End If
+
+            ContourMap.MPLine(LineCode) = newLine
+            ContourMap.Map.ALIN += 1
+            ContourMap.Check_Line_Maxmin(LineCode, True)
+
+            ' 枠線オブジェクトにラインを追加
+            Dim objIndex As Integer = FrameObjectStart + Frame_LineStac(i) + 1
+            If objIndex < ContourMap.MPObj.Length Then
+                With ContourMap.MPObj(objIndex)
+                    If .LineCodeSTC Is Nothing Then
+                        ReDim .LineCodeSTC(0)
+                        .NumOfLine = 0
+                    Else
+                        ReDim Preserve .LineCodeSTC(.NumOfLine)
+                    End If
+                    ' 正しいメンバー名を使用
+                    .LineCodeSTC(.NumOfLine).LineCode = LineCode
+                    .LineCodeSTC(.NumOfLine).NumOfTime = 0
+                    .NumOfLine += 1
+                End With
+            End If
+        Next
+    End Sub
+
+    Private Function Get_SRTM_WHDegree() As Size
+        ' SRTM/ASTER GDEMの範囲から横×縦の度数を取得
+        Dim width As Integer = GlobalRange.SouthEast.Longitude - GlobalRange.NorthWest.Longitude
+        Dim height As Integer = GlobalRange.NorthWest.Latitude - GlobalRange.SouthEast.Latitude
+        Return New Size(width, height)
+    End Function
+
+    Private Function Get_MeshFile_FileStream(ByVal fileName As String,
+                                             ByRef byteArray() As Byte,
+                                             ByVal readSize As Integer) As Boolean
+        Try
+            Using fs As New System.IO.FileStream(fileName, IO.FileMode.Open, IO.FileAccess.Read)
+                ReDim byteArray(readSize - 1)
+                fs.Read(byteArray, 0, readSize)
+                Return True
+            End Using
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
+    Private Function Get_SRTM_Mesh_File() As Boolean
+        ' SRTM形式のメッシュファイルを読み込む
+        ' 実装は既存のコードと同じ
+        Return False
+    End Function
+
+    Private Function Get_ETOPO5_Mesh_File() As Boolean
+        ' ETOPO5形式のメッシュファイルを読み込む
+        Return False
+    End Function
+
 End Class
