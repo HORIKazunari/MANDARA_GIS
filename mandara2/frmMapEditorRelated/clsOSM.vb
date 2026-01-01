@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Xml
 Public Class clsOSM
     Private Enum ReadingElement
@@ -64,7 +64,7 @@ Public Class clsOSM
 
         Dim s As New clsSortingSearch()
         s.AddRange(NodeKey.Count, NodeKey.ToArray)
-        Dim NodeKeyPat_pre() As String
+        Dim NodeKeyPat_pre() As String = Nothing
         Dim NodekeyValueN As Integer = s.getEachValue_Alley(NodeKeyPat_pre)
         Dim NodeKeyPat_pre2(NodekeyValueN - 1) As String
         For i As Integer = 0 To NodekeyValueN - 1
@@ -89,7 +89,7 @@ Public Class clsOSM
 
         Dim s2 As New clsSortingSearch()
         s2.AddRange(wayKey.Count, wayKey.ToArray)
-        Dim WayKeyPat_pre() As String
+        Dim WayKeyPat_pre() As String = Nothing
         Dim WaykeyValueN As Integer = s2.getEachValue_Alley(WayKeyPat_pre)
         Dim WayKeyPat_pre2(WaykeyValueN - 1) As String
         For i As Integer = 0 To WaykeyValueN - 1
@@ -143,7 +143,7 @@ Public Class clsOSM
                         .Type = clsMapData.enmDefTimeAttDataType.SpanData
                         .ExtraValue = clsMapData.enmDefPointAttDataExtraValue.MissingValue
 
-                        Dim ttl As String
+                        Dim ttl As String = ""
                         Select Case k
                             Case 0
                                 ttl = NodeKeyPat(i)
@@ -251,9 +251,9 @@ Public Class clsOSM
         st.IgnoreComments = True
         Dim readingNodeText As ReadingElement
         NodeData = New List(Of strNodeInfo)
-        Dim NodeElement As strNodeInfo
-        Dim WayElement As strWayInfo
-        Dim RelationElement As strRelationInfo
+        Dim NodeElement As strNodeInfo = Nothing
+        Dim WayElement As strWayInfo = Nothing
+        Dim RelationElement As strRelationInfo = Nothing
         Dim nodeStart As Boolean
         Try
             Dim reader As XmlReader = XmlReader.Create(FileName, st)
