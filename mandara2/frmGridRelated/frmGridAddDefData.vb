@@ -1,4 +1,4 @@
-﻿Public Class frmGridAddDefData
+Public Class frmGridAddDefData
     Dim CloseCancelF As Boolean
     Dim attr As clsAttrData
     Dim ktGrid As KTGISUserControl.KTGISGrid
@@ -101,8 +101,8 @@
     ''' <remarks></remarks>
     Public Function GetResults(ByRef FYDataValue(,) As String, ByRef DataValue(,) As String, ByRef LayMapFile As String,
                                ByRef LayName As String, ByRef LayTime As strYMD, ByRef shp As enmShape) As Boolean
-        Dim fydataV(,) As String
-        Dim DataV(,) As String
+        Dim fydataV(,) As String = Nothing
+        Dim DataV(,) As String = Nothing
         Dim RetF As Boolean
         Select Case True
             Case rbAddPresentLayer.Checked
@@ -135,7 +135,7 @@
                             If code <> -1 Then
                                 If mpFile.MPObj(code).Kind = oGroup Then
                                     For j As Integer = 0 To xs - 1
-                                        Dim V As String
+                                        Dim V As String = ""
                                         mpFile.Get_DefTimeAttrValue(code, lbPlayDefData.SelectedIndices(j), L_Time, V)
                                         DataV(j, i) = V
                                         f = True
@@ -168,7 +168,7 @@
                 Dim MapFileName As String = cboNewLayerMapFile.Text
                 Dim mpFile As clsMapData = attr.SetMapFile(MapFileName)
                 Dim xs As Integer = lbNewLayerDefData.SelectedIndices.Count
-                Dim okObj() As Integer
+                Dim okObj() As Integer = Nothing
                 Dim n As Integer = mpFile.Get_Objects_by_Group(oGroup, okObj)
                 ReDim DataV(xs, n - 1)
                 ReDim fydataV(xs - 1, 3)
@@ -181,11 +181,11 @@
                 Dim obn As Integer = 0
                 Dim misf(xs - 1) As Boolean
                 For i As Integer = 0 To n - 1
-                    Dim obName() As String
+                    Dim obName() As String = Nothing
                     If mpFile.Get_Enable_ObjectName(okObj(i), L_Time, False, obName) = True Then
                         DataV(0, obn) = obName(0)
                         For j As Integer = 0 To xs - 1
-                            Dim value As String
+                            Dim value As String = ""
                             Dim attf As Boolean = mpFile.Get_DefTimeAttrValue(okObj(i), lbNewLayerDefData.SelectedIndices(j), L_Time, value)
                             If attf = False Then
                                 value = ""
