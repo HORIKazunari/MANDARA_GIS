@@ -1,4 +1,4 @@
-﻿
+
 Public Class clsDrawMarkFan
     Public Shared Mark_Num As Integer
     Private Shared Mark_Pointer() As Integer
@@ -94,7 +94,7 @@ Public Class clsDrawMarkFan
                                     n += 1
                                     Dim ln3 As Integer
                                     If ln = -1 Then '円の場合
-                                        Dim en_xy() As Point
+                                        Dim en_xy() As Point = Nothing
                                         Dim P2 As Point = Position
                                         P2.Offset(Mark_Stac(n) * r / 100, Mark_Stac(n + 1) * r / 100)
                                         Dim f As Boolean = Get_DAEN_Peri_XY(P2, r * Mark_Stac(n + 2) / 100, r * Mark_Stac(n + 3) / 100,
@@ -188,6 +188,7 @@ Public Class clsDrawMarkFan
         'End If
 
         'Unload frmMark_Set
+        Return False
     End Function
     ''' <summary>
     ''' 扇形描画
@@ -220,7 +221,7 @@ Public Class clsDrawMarkFan
                        ByRef ScrData As Screen_info, ByRef basePic As BasePicture_Info) As Boolean
 
 
-        If XR = 0 Or YR = 0 Then Exit Function
+        If XR = 0 Or YR = 0 Then Return False
 
         Dim inf As Boolean
         If XR = YR And Real_Circle_F = True And _
@@ -251,7 +252,8 @@ Public Class clsDrawMarkFan
         Else
             '円の周の座標を計算する必要あり.
             Dim n As Integer
-            Dim pxy() As Point, nPolyn(0) As Integer
+            Dim pxy() As Point = Nothing
+            Dim nPolyn(0) As Integer
             inf = Get_DAEN_Peri_XY(Position, XR, YR, Kakudo, n, pxy, ScrData)
             If inf = True Then
                 nPolyn(0) = n
@@ -259,7 +261,7 @@ Public Class clsDrawMarkFan
 
             End If
         End If
-        Draw_DAEN = inf
+        Return inf
 
     End Function
     ''' <summary>

@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports System.Xml
 Public Class clsKiban
     Public Structure strKiban_Info
@@ -166,7 +166,7 @@ Public Class clsKiban
     Private Function openKibanXML(ByVal FileName As String, ByRef ObjData As List(Of ObjData_Info)) As Boolean
 
         Dim RefKibanType As strKiban_Info = GetKibanType(FileName)
-        Dim readingNodeText As String
+        Dim readingNodeText As String = ""
 
         Dim st As New System.Xml.XmlReaderSettings
         '空白を無視する
@@ -175,7 +175,7 @@ Public Class clsKiban
         Dim reader As XmlReader
         Try
             reader = XmlReader.Create(FileName, st)
-            Dim SoloData As ObjData_Info
+            Dim SoloData As ObjData_Info = Nothing
             Dim readingDataIndex As Integer
             Try
                 While reader.Read()

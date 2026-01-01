@@ -1,4 +1,4 @@
-﻿Public Class frmMED_CensusGISData
+Public Class frmMED_CensusGISData
     Dim CloseCancelF As Boolean
     Dim File_List() As String
     Dim MapData As clsMapData
@@ -51,8 +51,8 @@
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         Dim zahyo As clsMapData.Zahyo_info
-        Dim GCODE() As String
-        Dim Year As String
+        Dim GCODE() As String = Nothing
+        Dim Year As String = ""
 
         If rbCSV.Checked = True Then
             If clsGeneric.Check_Folder_Exists(FileSelect.Path) = False Then
@@ -345,7 +345,7 @@
                 Dim sr As New System.IO.StreamReader(filename, System.Text.Encoding.GetEncoding("shift_jis"))
                 Dim a1 As String = sr.ReadLine
                 Dim a2 As String = sr.ReadLine
-                Dim hitokugassanf() As Boolean
+                Dim hitokugassanf() As Boolean = Nothing
                 If j = 0 Then
                     Dim DTopTitle() As String = Split(a1, ",")
                     Dim DTitle() As String = Split(a2, ",")
@@ -475,9 +475,6 @@
     ''' <remarks></remarks>
     Private Function Get_TokeiMap(ByVal Folder As String, ByVal DYear As String, ByVal n As Integer, ByRef GCODE() As String, ByVal Zahyo As clsMapData.Zahyo_info) As Boolean
         '
-        Dim Oalin As Long, Taisho_Line() As Boolean
-        Dim Combinef() As Boolean
-
         MapData = New clsMapData()
         Dim UseFile As String = ""
         ProgressBar1.Maximum = n + 1

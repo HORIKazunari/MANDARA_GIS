@@ -1,4 +1,4 @@
-﻿Public Class frmMain_ExchangeObjectName
+Public Class frmMain_ExchangeObjectName
     Dim CloseCancelF As Boolean
     Dim attrData As clsAttrData
     Dim LayerNum As Integer
@@ -42,10 +42,10 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults(ByRef ObjG As Integer, ByRef ObjNameListNum As Integer)
+    Public Sub GetResults(ByRef ObjG As Integer, ByRef ObjNameListNum As Integer)
         ObjG = selObjG(cboObjectGroup.SelectedIndex)
         ObjNameListNum = cboObjectNameList.SelectedIndex
-    End Function
+    End Sub
 
     Private Sub cboObjectGroup_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboObjectGroup.SelectedIndexChanged
         cboObjectNameList.Items.Clear()

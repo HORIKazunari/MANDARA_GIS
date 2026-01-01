@@ -1,4 +1,4 @@
-﻿Public Class frmMain_AreaPeripheri
+Public Class frmMain_AreaPeripheri
     Dim CloseCancelF As Boolean
     Dim attrData As clsAttrData
     Dim LayerNum As Integer
@@ -37,9 +37,6 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         Dim n As Integer = attrData.Get_ObjectNum(LayerNum)
@@ -53,7 +50,7 @@
         Dim SUnit As String = clsGeneric.getScaleUnitStrings(ScaleUnit)
         Dim Unit As String = ""
 
-        Select True
+        Select Case True
             Case rbArea.Checked
                 For i As Integer = 0 To n - 1
                     Dim v As Single = attrData.GetObjMenseki(LayerNum, i) * ScaleRatio ^ 2

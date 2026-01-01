@@ -1,4 +1,4 @@
-﻿Public Class frmMain_Autocorrelation
+Public Class frmMain_Autocorrelation
     Private Structure objNeighbour_Info
         Public ObjectNumber As Integer
         Public wValue As Single
@@ -84,7 +84,7 @@
         Dim o_n = attrData.Get_ObjectNum(LayerNum)
         For i As Integer = 0 To o_n - 1
             With attrData.LayerData(LayerNum)
-                Dim ELine() As clsMapData.EnableMPLine_Data
+                Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                 Dim NL As Integer = attrData.Get_Enable_KenCode_MPLine(ELine, LayerNum, i)
 
                 For j As Integer = 0 To NL - 1
@@ -164,6 +164,10 @@
     Private Sub frmMain_Autocorrelation_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.HelpButtonClicked
         e.Cancel = True
         clsGeneric.HelpShow(enmHelpFile.SettingWindow, "frmMain_Autocorrelation", Me)
+
+    End Sub
+
+    Private Sub frmMain_Autocorrelation_Load()
 
     End Sub
 End Class

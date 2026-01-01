@@ -1,4 +1,4 @@
-﻿Public Class frmMain_ObjectLimitaion
+Public Class frmMain_ObjectLimitaion
     Dim CloseCancelF As Boolean
     Dim attData As clsAttrData
     Dim LayerNum As Integer
@@ -48,7 +48,7 @@
         SetCheckBox()
         Return Me.ShowDialog
     End Function
-    Public Function GetResults()
+    Public Sub GetResults()
         For i As Integer = 0 To cbObj.Items.Count - 1
             LayerObjVisible(i) = cbObj.GetItemChecked(i)
         Next
@@ -65,7 +65,7 @@
                 End If
             Next
         End With
-    End Function
+    End Sub
 
     Private Sub cboLayer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboLayer.SelectedIndexChanged
         If Me.Tag = "OFF" Then

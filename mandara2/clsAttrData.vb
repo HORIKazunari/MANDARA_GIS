@@ -1,4 +1,4 @@
-﻿Imports System.Runtime.Serialization
+Imports System.Runtime.Serialization
 
 ''' <summary>
 ''' 画面上に固定または地図領域に固定
@@ -349,7 +349,7 @@ Public Class clsAttrData
         Public MeshPoint() As PointF
         Public Visible As Boolean
         Public Function Clone() As strObject_Data_Info
-            Dim newObj As strObject_Data_Info
+            Dim newObj As strObject_Data_Info = New strObject_Data_Info()
             With newObj
                 .MpObjCode = Me.MpObjCode
                 .Name = Me.Name
@@ -649,7 +649,7 @@ Public Class clsAttrData
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function Clone(ByVal NoValueFlag As Boolean) As strData_info
-            Dim DT As strData_info
+            Dim DT As strData_info = New strData_info()
             With DT
                 .Title = Me.Title
                 .Unit = Me.Unit
@@ -784,7 +784,7 @@ Public Class clsAttrData
         Public En_Obi As strGraph_Data_En
         Public Oresen_Bou As strGraph_Data_Oresen
         Public Function Clone() As strGraph_Data
-            Dim RData As strGraph_Data
+            Dim RData As strGraph_Data = New strGraph_Data()
             With RData
                 .GraphMode = Me.GraphMode
                 .title = Me.title
@@ -841,7 +841,7 @@ Public Class clsAttrData
         Public SelectedIndex As Integer
         Public DataSet() As strGraph_Data
         Public Function Clone()
-            Dim RData As strGraphMode_DataSetting_Info
+            Dim RData As strGraphMode_DataSetting_Info = New strGraphMode_DataSetting_Info()
             With RData
                 .Count = Me.Count
                 .SelectedIndex = Me.SelectedIndex
@@ -892,7 +892,7 @@ Public Class clsAttrData
         Public SelectedIndex As Integer
         Public DataSet() As strTrip_Data
         Public Function Clone()
-            Dim RData As strTripMode_Data_Info
+            Dim RData As strTripMode_Data_Info = New strTripMode_Data_Info()
             With RData
                 .Count = Me.Count
                 .SelectedIndex = Me.SelectedIndex
@@ -955,11 +955,6 @@ Public Class clsAttrData
         ''' <remarks></remarks>
         Public ZData As Integer
         ''' <summary>
-        ''' true=Print
-        ''' </summary>
-        ''' <remarks></remarks>
-
-        ''' <summary>
         ''' 移動データモードの個別アイテム初期設定
         ''' </summary>
         ''' <remarks></remarks>
@@ -1009,7 +1004,7 @@ Public Class clsAttrData
         Public BorderDataTile As Tile_Property
         Public BorderLine As Line_Property
         Public Function Clone() As strLabel_Data
-            Dim RData As strLabel_Data
+            Dim RData As strLabel_Data = New strLabel_Data()
             With RData
                 .title = Me.title
                 .Location_Mark_Flag = Me.Location_Mark_Flag
@@ -1137,7 +1132,7 @@ Public Class clsAttrData
         Public SelectedIndex As Integer
         Public DataSet() As strLabel_Data
         Public Function Clone()
-            Dim RData As strLabelMode_Data_info
+            Dim RData As strLabelMode_Data_info = New strLabelMode_Data_info()
             With RData
                 .Count = Me.Count
                 .SelectedIndex = Me.SelectedIndex
@@ -2187,7 +2182,7 @@ Public Class clsAttrData
             Me.AddDataSet()
         End Sub
         Public Sub AddDataSet()
-            Dim d As strOverLay_Dataset_Info
+            Dim d As strOverLay_Dataset_Info = New strOverLay_Dataset_Info()
             d.initData()
             Me.DataSet.Add(d)
         End Sub
@@ -2241,7 +2236,7 @@ Public Class clsAttrData
             Me.AddDataSet()
         End Sub
         Public Sub AddDataSet()
-            Dim d As strSeries_Dataset_Info
+            Dim d As strSeries_Dataset_Info = New strSeries_Dataset_Info()
             d.initData()
             Me.DataSet.Add(d)
         End Sub
@@ -2525,6 +2520,7 @@ Public Class clsAttrData
     ''' <remarks></remarks>
     Public Function RemoveMapData(ByVal MapFileName As String)
         Me.MapData.RemoveMapData(MapFileName)
+        Return True
     End Function
     ''' <summary>
     ''' 既存地図ファイル追加
@@ -3082,7 +3078,6 @@ Public Class clsAttrData
                 ReDim saveLPat.LpatNumByMapfile(saveLPat.MapNum - 1)
                 saveLPat.Lpat = New List(Of clsMapData.LineKind_Data)
                 For i As Integer = 0 To MapFileList.Length - 1
-                    Dim LK() As clsMapData.LPatSek_Info
                     Dim n As Integer = Me.SetMapFile(MapFileList(i)).Map.LpNum
                     saveLPat.LpatNumByMapfile(i) = n
                     For j As Integer = 0 To n - 1
@@ -3343,7 +3338,7 @@ Public Class clsAttrData
     Public Function SetDataFromOldMDR(ByVal MDRFileName As String, ByRef ObjectErrorMessage As String, ByRef ProgressBar As ProgressBar) As Boolean
         MapData = New clsAttrMapData
         Dim MapData2 As New clsMapData
-        Dim oldMDRData As clsOldMDRFile.MDR_1275
+        Dim oldMDRData As clsOldMDRFile.MDR_1275 = New clsOldMDRFile.MDR_1275()
         ProgressBar.Maximum = 130
         ProgressBar.Visible = True
         Dim f As Boolean = clsOldMDRFile.Get_OldMDRFile(MDRFileName, oldMDRData, MapData2, ProgressBar)
@@ -3663,7 +3658,7 @@ Public Class clsAttrData
         progressbar.Value += 1
         If Me.TotalData.BasePicture.PictureNum <> 0 Then
             For i As Integer = 0 To Me.TotalData.BasePicture.PictureNum - 1
-                Dim p As Picture_Property = Me.TotalData.BasePicture.PictureData.Item(i), Picture_Property
+                Dim p As Picture_Property = Me.TotalData.BasePicture.PictureData.Item(i)
                 p.SetBitmap(clsGeneric.CreateImage(tmpFolderName + "\picture" + i.ToString + ".png"))
                 Me.TotalData.BasePicture.PictureData.Item(i) = p
             Next
@@ -3685,7 +3680,7 @@ Public Class clsAttrData
         Dim PointObjG As Dictionary(Of String, String()) = Me.GetAllPointObjectGroup
         For Each pair As KeyValuePair(Of String, String()) In PointObjG
             If pair.Value.Length > 0 Then
-                Dim existobk As clsAttrData.strDummyObjectPointMark_Info()
+                Dim existobk() As clsAttrData.strDummyObjectPointMark_Info = Nothing
                 Dim existobkf As Boolean = False
                 If Me.TotalData.ViewStyle.DummyObjectPointMark.ContainsKey(pair.Key) = True Then
                     existobk = Me.TotalData.ViewStyle.DummyObjectPointMark(pair.Key)
@@ -3764,7 +3759,7 @@ Public Class clsAttrData
     Private Function ReadAttrDataOneLine(ByVal STR() As String, ByVal Splitter As String, ByRef ObjectErrorMessage As String, ByRef ProgressBar As ProgressBar) As Boolean
         Dim Map_readed As Boolean = False
         Dim TotalMissing As Boolean = False
-        Dim LayerReading As strLayerReadingInfo
+        Dim LayerReading As strLayerReadingInfo = New strLayerReadingInfo()
         Dim LayerTypeTripDefinitionExists As Boolean = False
         Dim lay As Integer = -1
         Dim OK_Flag As Boolean = True
@@ -4261,9 +4256,9 @@ Public Class clsAttrData
             Return False
         End If
         Dim DN_Str(MxData - 2, LayerReading.ObjectDataStac.Count - 1) As String
-        Dim Get_Obj() As strObject_Data_Info
-        Dim GetTripObj() As strTripObjData_Info
-        Dim GetTripDefinitionName() As String
+        Dim Get_Obj() As strObject_Data_Info = Nothing
+        Dim GetTripObj() As strTripObjData_Info = Nothing
+        Dim GetTripDefinitionName() As String = Nothing
         Select Case LayerReading.Type
             Case enmLayerType.Trip_Definition
                 ReDim GetTripDefinitionName(LayerReading.ObjectDataStac.Count - 1)
@@ -4797,7 +4792,7 @@ Public Class clsAttrData
                 f = True
             End If
         Next
-        Dim triDefiName As clsSortingSearch
+        Dim triDefiName As clsSortingSearch = Nothing
         If Trip_Defi_Layer <> -1 And f = False Then
             E_Message += "移動データレイヤが作成されていません。" + vbCrLf
             Check_Data = False
@@ -5797,8 +5792,8 @@ Public Class clsAttrData
                                 Div_Value(n) = SortV.DataPositionRevValue_double(i)
                                 divv += divvStp
                                 n += 1
-                                Addv = Addv - Mense(j)
-                                i = i - 1
+                                Addv -= Mense(j)
+                                i -= 1
                             End If
                         Next
                     End If
@@ -5855,7 +5850,8 @@ Public Class clsAttrData
                 Return True
             End With
         Else
-            Dim Arrange_LineCode(,) As Integer, Fringe() As clsMapData.Fringe_Line_Info
+            Dim Arrange_LineCode(,) As Integer = Nothing
+            Dim Fringe() As clsMapData.Fringe_Line_Info = Nothing
             Dim Pon As Integer = Boundary_Kencode_Arrange(LayerNum, ObjNumber, Arrange_LineCode, Fringe)
             If Pon <= 0 Then
                 Return False
@@ -5877,7 +5873,8 @@ Public Class clsAttrData
     ''' <remarks></remarks>
     Public Function GetObjMenseki(ByVal LayerNum As Integer, ByVal ObjNumber As Integer) As Single
 
-        Dim Arrange_LineCode(,) As Integer, Fringe() As clsMapData.Fringe_Line_Info
+        Dim Arrange_LineCode(,) As Integer = Nothing
+        Dim Fringe() As clsMapData.Fringe_Line_Info = Nothing
         If LayerData(LayerNum).Type = enmLayerType.Mesh Then
             Dim p() As PointF = LayerData(LayerNum).atrObject.atrObjectData(ObjNumber).MeshPoint.Clone
             ReDim Preserve p(5)
@@ -5905,7 +5902,7 @@ Public Class clsAttrData
     Public Function Get_ObjectLength(ByVal Layernum As Integer, ByVal ObjNum As Integer) As Single
         '
 
-        Dim ELine() As clsMapData.EnableMPLine_Data
+        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
 
         Dim NL As Integer
 
@@ -5937,7 +5934,7 @@ Public Class clsAttrData
         Next
         If TotalData.ViewStyle.Zahyo.Mode = enmZahyo_mode_info.Zahyo_Ido_Keido Then
         Else
-            D = D / LayerData(Layernum).MapFileData.Map.SCL
+            D /= LayerData(Layernum).MapFileData.Map.SCL
         End If
         Return D
     End Function
@@ -5980,7 +5977,7 @@ Public Class clsAttrData
         Else
             Get_Layer_Name = "レイヤ:" & LayerData(Layernum).Name & vbCrLf
             If CR_F = True Then
-                Get_Layer_Name = Get_Layer_Name & vbCrLf
+                Get_Layer_Name &= vbCrLf
             End If
         End If
     End Function
@@ -6081,7 +6078,7 @@ Public Class clsAttrData
     Public Function Boundary_Kencode_Arrange(ByVal Layernum As Integer, ByVal ObjNum As Integer,
                                              ByRef Arrange_LineCode(,) As Integer, ByRef Fringe() As clsMapData.Fringe_Line_Info) As Integer
 
-        Dim ELine() As clsMapData.EnableMPLine_Data
+        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
         Dim NL As Integer
 
         Dim O_Code As Integer = LayerData(Layernum).atrObject.atrObjectData(ObjNum).MpObjCode
@@ -6091,6 +6088,8 @@ Public Class clsAttrData
             Case enmKenCodeObjectstructure.SyntheticObj
                 NL = Get_Enable_KenCode_MPLine(ELine, Layernum, ObjNum)
                 Return LayerData(Layernum).MapFileData.Boundary_Arrange_Sub(NL, ELine, Arrange_LineCode, Fringe)
+            Case Else
+                Throw New InvalidOperationException("未対応のオブジェクト構造です: " & LayerData(Layernum).atrObject.atrObjectData(ObjNum).Objectstructure.ToString())
         End Select
 
     End Function
@@ -6112,6 +6111,8 @@ Public Class clsAttrData
                 Return LayerData(Layernum).MapFileData.Get_EnableMPLine(Enable_LCode, O_Code, LayerData(Layernum).Time)
             Case enmKenCodeObjectstructure.SyntheticObj
                 Return Get_EnableMPLine_SyntheticObject(Enable_LCode, Layernum, ObjNum)
+            Case Else
+                Throw New InvalidOperationException("未対応のオブジェクト構造です: " & LayerData(Layernum).atrObject.atrObjectData(ObjNum).Objectstructure.ToString())
         End Select
     End Function
     ''' <summary>
@@ -6136,7 +6137,7 @@ Public Class clsAttrData
                 If .Objects(i).Draw_F = True Then
                     Dim c As Integer = .Objects(i).code
                     If c <> -1 Then
-                        Dim ELine() As clsMapData.EnableMPLine_Data
+                        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                         Dim LineN As Integer = LayerData(Layernum).MapFileData.Get_EnableMPLine(ELine, c, Time)
                         For j As Integer = 0 To LineN - 1
                             If UBound(ELineStock) < SObjectLineN Then
@@ -6396,6 +6397,7 @@ Public Class clsAttrData
             .initLayerData()
         End With
         TotalData.LV1.Lay_Maxn += 1
+        Return NewLay
     End Function
     ''' <summary>
     ''' 移動レイヤの追加
@@ -6441,8 +6443,8 @@ Public Class clsAttrData
             End With
             .initLayerData()
         End With
-
         TotalData.LV1.Lay_Maxn += 1
+        Return NewLay
     End Function
     ''' <summary>
     ''' レイヤの追加（移動レイヤを除く）
@@ -6495,10 +6497,8 @@ Public Class clsAttrData
             End With
             .initLayerData()
         End With
-
         TotalData.LV1.Lay_Maxn += 1
-
-
+        Return NewLay
     End Function
     ''' <summary>
     ''' 地図ファイルをセット
@@ -7177,7 +7177,7 @@ Public Class clsAttrData
                                 Dim cp2 As PointF = spatial.Get_Reverse_XY(cp, Zahyo)
                                 LLRect = spatial.Get_Circumscribed_Rectangle(cp2, LLRect)
                             Else
-                                Dim ELine() As clsMapData.EnableMPLine_Data
+                                Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                 Dim n As Integer = MapFileData.Get_EnableMPLine(ELine, dmObj(j), LayerTime)
                                 For k As Integer = 0 To n - 1
                                     If LC(ELine(k).LineCode) = False Then
@@ -7225,7 +7225,7 @@ Public Class clsAttrData
                                     Dim p As PointF = spatial.Get_Reverse_XY(.atrObject.atrObjectData(j).CenterPoint, Zahyo)
                                     LLRect = spatial.Get_Circumscribed_Rectangle(p, LLRect)
                                 Else
-                                    Dim ELine() As clsMapData.EnableMPLine_Data
+                                    Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                     Dim n As Integer = Me.Get_Enable_KenCode_MPLine(ELine, i, j)
                                     For k As Integer = 0 To n - 1
                                         Dim cd As Integer = ELine(k).LineCode
@@ -7494,7 +7494,7 @@ Public Class clsAttrData
                                     For k As Integer = 0 To MapFileData.Map.Kend - 1
                                         If MapFileData.MPObj(k).Kind = .ObjGroup(j).GroupNumber Then
                                             'オブジェクトが線種の使用オブジェクトとグループが同じ
-                                            Dim ELine() As clsMapData.EnableMPLine_Data
+                                            Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                             Dim n As Integer = MapFileData.Get_EnableMPLine(ELine, k, LayerData(Lay).Time)
                                             For k2 As Integer = 0 To n - 1
                                                 If ELine(k2).Kind = i Then
@@ -7513,7 +7513,7 @@ Public Class clsAttrData
                                             obk = LayerData(Lay).atrObject.MPSyntheticObj(LayerData(Lay).atrObject.atrObjectData(k).MpObjCode).Kind
                                         End If
                                         If obk = .ObjGroup(j).GroupNumber Then
-                                            Dim ELine() As clsMapData.EnableMPLine_Data
+                                            Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                             Dim n As Integer = Get_Enable_KenCode_MPLine(ELine, Lay, k)
                                             For k2 As Integer = 0 To n - 1
                                                 If ELine(k2).Kind = i Then
@@ -7562,14 +7562,20 @@ Public Class clsAttrData
                 Case enmKenCodeObjectstructure.SyntheticObj
                     Dim f As Boolean = Check_Point_in_Kencode_oneObject_Box(Layernum, ObjNum, MapP.X, MapP.Y)
                     If f = True Then
-                        Dim ELine() As clsMapData.EnableMPLine_Data
+                        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                         Dim n As Integer = Get_Enable_KenCode_MPLine(ELine, Layernum, ObjNum)
                         Dim Fringe_Line(n) As Integer
                         For j As Integer = 0 To n - 1
                             Fringe_Line(j) = ELine(j).LineCode
                         Next
                         Return LayerData(Layernum).MapFileData.Check_Point_in_Polygon_LineCode(MapP.X, MapP.Y, n, Fringe_Line)
+                    Else
+                        ' オブジェクトの外接矩形外の場合はFalseを返す
+                        Return False
                     End If
+                Case Else
+                    ' 想定外のオブジェクト構造の場合はFalseを返す
+                    Return False
             End Select
         End If
 
@@ -7594,6 +7600,7 @@ Public Class clsAttrData
         Select Case LayerData(Layernum).atrObject.atrObjectData(ObjNum).Objectstructure
             Case enmKenCodeObjectstructure.MapObj
                 f = LayerData(Layernum).MapFileData.Check_Point_in_oneObject_Box(O_Code, X, Y)
+                Return f
             Case enmKenCodeObjectstructure.SyntheticObj
                 f = False
                 With LayerData(Layernum).atrObject.MPSyntheticObj(O_Code)
@@ -7605,7 +7612,9 @@ Public Class clsAttrData
                         End If
                     Next
                 End With
-                Check_Point_in_Kencode_oneObject_Box = f
+                Return f
+            Case Else
+                Return False
         End Select
     End Function
     ''' <summary>
@@ -7626,7 +7635,7 @@ Public Class clsAttrData
                     Next
                     For j As Integer = 0 To .MapFileData.Map.Kend - 1
                         If ObjGIndex(.MapFileData.MPObj(j).Kind) = True Then
-                            Dim ELine() As clsMapData.EnableMPLine_Data
+                            Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                             Dim n As Integer = .MapFileData.Get_EnableMPLine(ELine, j, .Time)
                             For k As Integer = 0 To n - 1
                                 Dim Lcode As Integer = ELine(k).LineCode
@@ -7642,7 +7651,7 @@ Public Class clsAttrData
                     For j As Integer = 0 To .Dummy.Count - 1
                         Dim c As Integer = .Dummy.DummyObj(j).code
                         If .MapFileData.MPObj(c).Shape <> enmShape.PointShape Then
-                            Dim ELine() As clsMapData.EnableMPLine_Data
+                            Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                             Dim n As Integer = .MapFileData.Get_EnableMPLine(ELine, c, .Time)
                             For k As Integer = 0 To n - 1
                                 Dim Lcode As Integer = ELine(k).LineCode
@@ -7663,7 +7672,7 @@ Public Class clsAttrData
                             Case enmShape.PolygonShape
                                 Dim LUse(.MapFileData.Map.ALIN - 1) As Integer
                                 For j As Integer = 0 To Math.Min(.atrObject.ObjectNum, 100) - 1
-                                    Dim ELine() As clsMapData.EnableMPLine_Data
+                                    Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                     Dim n As Integer = Me.Get_Enable_KenCode_MPLine(ELine, i, j)
                                     For k As Integer = 0 To n - 1
                                         LUse(ELine(k).LineCode) += 1
@@ -7677,7 +7686,7 @@ Public Class clsAttrData
                                 If Me.TempData.SoubyouLayerEnable(i) = True Then
                                     'ループオブジェクトの中で、最後に残す一番面積の大きいループを決める
                                     For j As Integer = 0 To .atrObject.ObjectNum - 1
-                                        Dim ELine() As clsMapData.EnableMPLine_Data
+                                        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                         Dim n As Integer = Me.Get_Enable_KenCode_MPLine(ELine, i, j)
                                         Dim Loop_mens = New clsSortingSearch(VariantType.Single)
                                         Dim LoopOnlyf As Boolean = True
@@ -7740,7 +7749,7 @@ Public Class clsAttrData
                             If LayerData(i).Type = enmLayerType.Mesh Then
                                 LayerData(i).PrtSpatialIndex.AddLine(4, LayerData(i).atrObject.atrObjectData(j).MeshPoint, j)
                             Else
-                                Dim ELine() As clsMapData.EnableMPLine_Data
+                                Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
                                 Dim n As Integer = Get_Enable_KenCode_MPLine(ELine, i, j)
                                 For k As Integer = 0 To n - 1
                                     With LayerData(i).MapFileData.MPLine(ELine(k).LineCode)
@@ -7775,15 +7784,13 @@ Public Class clsAttrData
         Next
         Return n
     End Function
-        ''' <summary>
-        ''' 移動データレイヤの位置をListで返す
-        ''' </summary>
-        ''' <param name="LayNumber"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+    ''' <summary>
+    ''' 移動データレイヤの位置をListで返す
+    ''' </summary>
+    ''' <param name="LayNumber"></param>
+    ''' <remarks></remarks>
     Public Function Get_Trip_Layer() As List(Of Integer)
         Dim la As New List(Of Integer)
-        Dim n As Integer = -1
         For i As Integer = 0 To Me.TotalData.LV1.Lay_Maxn - 1
             If Me.LayerData(i).Type = enmLayerType.Trip Then
                 la.Add(i)
@@ -8018,8 +8025,8 @@ Public Class clsAttrData
         With LayerData(Layernum).atrData.Data(DataNum)
             For i As Integer = 0 To V_DVN - 1
                 Dim i2 As Integer
-                Dim a As String
-                Dim oa As String
+                Dim a As String = ""
+                Dim oa As String = ""
                 If Reverse_Flag = True Then
                     i2 = V_DVN - 1 - i
                 Else
@@ -8135,6 +8142,7 @@ Public Class clsAttrData
             Case enmLayerType.Trip
                 Return LayerData(Layernum).atrObject.TripObjData(Objectnum).TripPersonCode
             Case enmLayerType.Trip_Definition
+                Return Objectnum
             Case Else
                 Return LayerData(Layernum).atrObject.atrObjectData(Objectnum).MpObjCode
         End Select
@@ -8453,7 +8461,7 @@ Public Class clsAttrData
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function Get_InnerTile(ByVal InnerData As strInner_Data_Info, ByVal Layernum As Integer, ByVal CategoryPos As Integer) As Tile_Property
-        Dim T As Tile_Property
+        Dim T As Tile_Property = Nothing
 
         With InnerData
             Select Case .Mode
@@ -8828,7 +8836,7 @@ Public Class clsAttrData
                 For i As Integer = 0 To UseMap.Map.Kend - 1
                     If layData.UseObjectKind(UseMap.MPObj(i).Kind) = True Then
                         fobk = UseMap.MPObj(i).Kind
-                        Dim objName As String()
+                        Dim objName As String() = Nothing
                         If UseMap.Get_Enable_ObjectName(i, .Time, False, objName) = True Then
                             Dim CP As PointF
                             UseMap.Get_Enable_CenterP(CP, i, .Time)
@@ -9385,7 +9393,7 @@ Public Class clsAttrData
         '
 
 
-        Dim ELine() As clsMapData.EnableMPLine_Data
+        Dim ELine() As clsMapData.EnableMPLine_Data = Nothing
 
         Dim Time As strYMD = LayerData(LayNum).Time
         Dim Ocode As Integer = Get_KenObjCode(LayNum, ObjNum)
@@ -9413,7 +9421,6 @@ Public Class clsAttrData
     ''' </summary>
     ''' <param name="LayerDelNum">レイヤごとの削除数の配列。削除しない場合は0</param>
     ''' <param name="ObjectDeleteCheck">オブジェクトの数だけの配列で、削除する場合Trueを、全レイヤ分Listに格納</param>
-    ''' <returns></returns>
     ''' <remarks></remarks>
     Public Sub DeleteObjects(ByVal LayerDelNum() As Integer, ByRef ObjectDeleteCheck As List(Of Boolean()))
         Dim LayMax As Integer = Me.TotalData.LV1.Lay_Maxn
@@ -9423,7 +9430,7 @@ Public Class clsAttrData
         For i As Integer = 0 To LayMax - 1
             With Me.LayerData(i)
                 Dim oldObjN As Integer = .atrObject.ObjectNum
-                Dim ObjConv() As Integer
+                Dim ObjConv() As Integer = New Integer(0) {}
                 If LayerDelNum(i) > 0 Then
                     ReDim ObjConv(oldObjN - 1)
                     Dim obn As Boolean() = ObjectDeleteCheck(i)
@@ -9684,11 +9691,11 @@ Public Class clsAttrMapData
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetAllMapLineKind() As clsMapData.LPatSek_Info()
-        Dim LK() As clsMapData.LPatSek_Info
+        Dim LK() As clsMapData.LPatSek_Info = Nothing
         Dim n As Integer = 0
         For Each pair As KeyValuePair(Of String, clsMapData) In attrMapData
             Dim cmap As clsMapData = pair.Value
-            Dim LK2 As clsMapData.LPatSek_Info()
+            Dim LK2 As clsMapData.LPatSek_Info() = Nothing
             Dim LKAllN As Integer = cmap.Get_TotalLineKind(LK2)
             ReDim Preserve LK(n + LKAllN - 1)
             For j As Integer = 0 To LKAllN - 1
@@ -9705,11 +9712,11 @@ Public Class clsAttrMapData
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetAllMapLineKindName() As String()
-        Dim STR() As String
+        Dim STR() As String = Nothing
         Dim n As Integer = 0
         For Each pair As KeyValuePair(Of String, clsMapData) In attrMapData
             Dim cmap As clsMapData = pair.Value
-            Dim LK As clsMapData.LPatSek_Info()
+            Dim LK As clsMapData.LPatSek_Info() = Nothing
             Dim LKAllN As Integer = cmap.Get_TotalLineKind(LK)
             ReDim Preserve STR(n + LKAllN - 1)
             For j As Integer = 0 To LKAllN - 1
@@ -9829,7 +9836,6 @@ Public Class clsAttrMapData
     ''' 指定した地図ファイルを削除
     ''' </summary>
     ''' <param name="MapFileName"></param>
-    ''' <returns></returns>
     ''' <remarks></remarks>
     Public Sub RemoveMapData(ByVal MapFileName As String)
         If MapFileName = "" Then

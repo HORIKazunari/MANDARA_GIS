@@ -725,15 +725,16 @@ Public Class TextNumberBox
             End If
         End If
     End Sub
+    
     Private Sub check_Value(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Validating
         Dim v As Double = Val(Me.Text)
-        Dim etx As String
+        Dim etx As String = ""
         If Me._ValueErrorMessageFlag = True Then
             If _MinValueFlag = True And _MaxValueFlag = True Then
                 etx = _MinValue.ToString + "以上" + _MaxValue.ToString + "以下の値を入力して下さい。"
             ElseIf _MinValueFlag = True Then
                 etx = _MinValue.ToString + "以上の値を入力して下さい。"
-            ElseIf _MinValueFlag = True Then
+            ElseIf _MaxValueFlag = True Then
                 etx = _MaxValue.ToString + "以下の値を入力して下さい。"
             End If
         End If
@@ -755,8 +756,7 @@ Public Class TextNumberBox
                 e.Cancel = True
             End If
         End If
-
-    End Sub
+    End Sub    
     ''' <summary>
     ''' 数字入力trueの場合、小数点の使用
     ''' </summary>

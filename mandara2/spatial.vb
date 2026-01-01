@@ -292,7 +292,6 @@ Public Class spatial
         Dim trect = Get_Circumscribed_Rectangle(rect, Angle)
         TW = CInt(trect.Width)
         TH = CInt(trect.Height)
-        Dim dminx As Single, dmaxx As Single, dminy As Single, dmaxy As Single
 
 
     End Sub
