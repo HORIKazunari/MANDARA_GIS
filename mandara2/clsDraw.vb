@@ -1,4 +1,4 @@
-﻿
+
 Public Class clsDraw
 
     ''' <summary>
@@ -613,8 +613,8 @@ Public Class clsDrawLine
     ''' <remarks></remarks>
     Public Overloads Shared Sub Line(ByRef g As Graphics, ByRef LineP As Line_Property, ByVal nPoints As Integer,
                                      ByRef pxy() As Point, ByRef ScrData As Screen_info, ByRef basePic As BasePicture_Info)
-        Dim ParaXY1() As Point
-        Dim ParaXY2() As Point
+        Dim ParaXY1() As Point = Nothing
+        Dim ParaXY2() As Point = Nothing
         Dim Para_PolyXY() As Point
         Dim Para1_Points As Integer, Para2_Points As Integer
 

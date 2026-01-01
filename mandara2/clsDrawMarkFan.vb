@@ -1,4 +1,4 @@
-﻿
+
 Public Class clsDrawMarkFan
     Public Shared Mark_Num As Integer
     Private Shared Mark_Pointer() As Integer
@@ -221,7 +221,7 @@ Public Class clsDrawMarkFan
                        ByRef ScrData As Screen_info, ByRef basePic As BasePicture_Info) As Boolean
 
 
-        If XR = 0 Or YR = 0 Then Exit Function
+        If XR = 0 Or YR = 0 Then Return False
 
         Dim inf As Boolean
         If XR = YR And Real_Circle_F = True And _
@@ -252,7 +252,8 @@ Public Class clsDrawMarkFan
         Else
             '円の周の座標を計算する必要あり.
             Dim n As Integer
-            Dim pxy() As Point, nPolyn(0) As Integer
+            Dim pxy() As Point = Nothing
+            Dim nPolyn(0) As Integer
             inf = Get_DAEN_Peri_XY(Position, XR, YR, Kakudo, n, pxy, ScrData)
             If inf = True Then
                 nPolyn(0) = n
@@ -260,7 +261,7 @@ Public Class clsDrawMarkFan
 
             End If
         End If
-        Draw_DAEN = inf
+        Return inf
 
     End Function
     ''' <summary>
