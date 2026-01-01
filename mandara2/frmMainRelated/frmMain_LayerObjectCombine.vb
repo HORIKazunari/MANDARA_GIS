@@ -109,7 +109,6 @@ Public Class frmMain_LayerObjectCombine
         Dim Get_Layer_n As Integer = n
 
         Dim New_Lay_ObjN As Integer
-        Dim V As Double
 
         Dim New_Lay_DatN As Integer = 0
         Dim objMax As Integer = attrData.SetMapFile(MapFile).Map.Kend
