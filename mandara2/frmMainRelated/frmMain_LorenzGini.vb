@@ -1,4 +1,4 @@
-﻿Public Class frmMain_LorenzGini
+Public Class frmMain_LorenzGini
     Dim attrData As clsAttrData
     Dim LayerNum As Integer
     Dim gSize As Integer = 300
@@ -142,7 +142,7 @@
     End Sub
     Private Sub culcuData(ByRef g As Graphics)
         Dim xValue() As Double
-        Dim xMisF() As Boolean
+        Dim xMisF() As Boolean = Nothing
         Dim o_n As Integer = attrData.Get_ObjectNum(LayerNum)
         Select Case True
             Case rbNoX.Checked
