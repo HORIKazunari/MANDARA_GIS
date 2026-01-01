@@ -1,4 +1,4 @@
-﻿Public Class frmMain_LayerObjectCombine
+Public Class frmMain_LayerObjectCombine
     Private Structure newDataInfo
         Public oldLay As Integer
         Public oldDataNum As Integer
@@ -43,9 +43,6 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         Dim n As Integer = clbLayer.CheckedIndices.Count
@@ -55,7 +52,7 @@
             Return
         End If
         Dim etype As Integer = -1
-        Dim MapFile As String
+        Dim MapFile As String = ""
         Dim LayType As clsAttrData.enmLayerType
         For i As Integer = 0 To n - 2
             Dim j As Integer = clbLayer.CheckedIndices(i) + 1
@@ -120,7 +117,7 @@
         For i As Integer = 0 To Get_Layer_n - 1
             Dim Layernum As Integer = clbLayer.CheckedIndices(i)
             For j As Integer = 0 To attrData.Get_ObjectNum(Layernum) - 1
-                Dim key As String
+                Dim key As String = ""
                 Select Case LayType
                     Case clsAttrData.enmLayerType.Normal
                         key = attrData.Get_KenObjCode(Layernum, j).ToString
@@ -187,7 +184,7 @@
 
         'データ取得
 
-        Dim Exsistent_MeshObject As clsSortingSearch
+        Dim Exsistent_MeshObject As clsSortingSearch = Nothing
         New_Lay_ObjN = 0
         Dim D As Integer = 0
         For i As Integer = 0 To Get_Layer_n - 1
@@ -205,7 +202,7 @@
                 Exsistent_MeshObject.AddEnd()
             End If
             For j As Integer = 0 To attrData.Get_ObjectNum(Layernum) - 1
-                Dim key As String
+                Dim key As String = ""
                 Select Case LayType
                     Case clsAttrData.enmLayerType.Normal
                         key = attrData.Get_KenObjCode(Layernum, j).ToString
