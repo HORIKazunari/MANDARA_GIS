@@ -1,4 +1,4 @@
-﻿Public Class frmMED_TimeObjectSet
+Public Class frmMED_TimeObjectSet
     Private Enum ObjType_enum
         NewObject = 0
         Gappei = 1
@@ -106,7 +106,7 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
+    Public Sub GetResults()
         Dim data_n As Integer = AllFunction.Count
         For i As Integer = 0 To data_n - 1
             Select Case AllFunction(i)
@@ -228,7 +228,7 @@
 
             End Select
         Next
-    End Function
+    End Sub
     ''' <summary>
     ''' オブジェクトグループ変更
     ''' </summary>
@@ -247,7 +247,7 @@
             .NumOfSuc += 1
             MapData.Get_Enable_CenterP(Obj.CenterPSTC(0).Position, Data.OriginObjCode, yd)
             If MapData.ObjectKind(Obj.Kind).ObjectType = clsMapData.enmObjectGoupType_Data.AggregationObject Then
-                Dim agrObj() As Integer
+                Dim agrObj() As Integer = Nothing
                 Dim n As Integer = MapData.Get_EnableObj_used_AggregateObject(MapData.MPObj(Data.OriginObjCode), yd, agrObj)
                 Obj.NumOfLine = n
                 ReDim Obj.LineCodeSTC(n - 1)
@@ -256,7 +256,7 @@
                     Obj.LineCodeSTC(i).LineCode = agrObj(i)
                 Next
             Else
-                Dim U_Line() As clsMapData.EnableMPLine_Data
+                Dim U_Line() As clsMapData.EnableMPLine_Data = Nothing
                 Dim n As Integer = MapData.Get_EnableMPLine(U_Line, Data.OriginObjCode, yd)
                 Obj.NumOfLine = n
                 ReDim Obj.LineCodeSTC(n - 1)
@@ -384,7 +384,7 @@
     Private Sub GappeiObjCheck(ByVal Gyo As Integer, ByVal T As strYMD, ByVal GappeiObjname As String,
                         ByVal destName As String, ByVal destObjGroup As String, ByRef Msg As String)
         '
-        Dim Data As Gappei_Info
+        Dim Data As Gappei_Info = Nothing
         Dim hd As String = (Gyo + 1).ToString + ":"
         Dim emes As String = ""
         If GappeiObjname = "" Then
@@ -451,7 +451,7 @@
                 ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
             End If
         End If
-        Dim Data As ChangeName_Info
+        Dim Data As ChangeName_Info = Nothing
         If newname = "" Then
             emes += hd + "新しいオブジェクト名が指定されていません。" + vbCrLf
             ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
@@ -493,7 +493,7 @@
                 emes += hd + newname + "変更後オブジェクト名が見つかりません。" + vbCrLf
                 ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
             Else
-                Dim Data As ChangeNameRev_Info
+                Dim Data As ChangeNameRev_Info = Nothing
                 If oldname = "" Then
                     emes += hd + "変更前オブジェクト名が指定されていません。" + vbCrLf
                     ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
@@ -538,7 +538,7 @@
             End If
         End If
         If emes = "" Then
-            Dim Data As EndObj_Info
+            Dim Data As EndObj_Info = Nothing
             If KeishoName <> "" Then
                 Dim Tday As strYMD = clsTime.getTomorrow(T)
                 Dim errObj As String = ""
@@ -608,7 +608,7 @@
                         ktGrid.GridColor(0, 4, Gyo) = Color.Yellow
                     End If
                     If emes = "" Then
-                        Dim Data As HennnyuChangeName_Info
+                        Dim Data As HennnyuChangeName_Info = Nothing
                         If checkObjectNameListNum(newname, MapData.MPObj(cd2).Kind, emes, hd, Data.DestObjNameList) = True Then
                             With Data
                                 .Time = T
@@ -639,7 +639,7 @@
     Private Sub HennyuObjCheck(ByVal Gyo As Integer, ByVal T As strYMD, ByVal HennyuObjname As String, ByVal destName As String, ByRef Msg As String)
 
         Dim hd As String = (Gyo + 1).ToString + ":"
-        Dim Data As Hennnyu_Info
+        Dim Data As Hennnyu_Info = Nothing
         Dim errObj As String = ""
         Dim emes As String = ""
         If HennyuObjname = "" Then
@@ -683,7 +683,7 @@
     ''' <param name="NewObjGroup"></param>
     ''' <param name="Msg"></param>
     ''' <remarks></remarks>
-    Private Sub ChangeGroupCheck(ByVal Gyo As Integer, ByVal T As strYMD, ByVal OriginObjname As String, _
+    Private Sub ChangeGroupCheck(ByVal Gyo As Integer, ByVal T As strYMD, ByVal OriginObjname As String,
                             ByVal NewObjName As String, ByVal NewObjGroup As String, ByRef Msg As String)
 
 
@@ -702,7 +702,7 @@
             End If
         End If
         If emes = "" Then
-            Dim newObjGNumber As Integer
+            Dim newObjGNumber As Integer = 0
             If NewObjGroup = "" Then
                 emes += hd + "新しいオブジェクトグループが指定されていません。" + vbCrLf
                 ktGrid.GridColor(0, 4, Gyo) = Color.Yellow
@@ -786,7 +786,7 @@
         If KeishoName = "" Then
             emes += hd + "継承先オブジェクトが指定されていません。" + vbCrLf
         Else
-            Dim Data As Keisho_Info
+            Dim Data As Keisho_Info = Nothing
             Dim errObj As String = ""
             If CheckSplitObjectName(KeishoName, T, Data.KeishoObjCode, errObj) = False Then
                 emes += hd + errObj + ":継承先オブジェクトが見つかりません。" + vbCrLf
@@ -824,7 +824,7 @@
             ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
             emes += hd + OBG + "はオブジェクトグループに含まれません。" + vbCrLf
         End If
-        Dim Data As NewObject_Info
+        Dim Data As NewObject_Info = Nothing
         Dim SP() As String = Split(XYS, "|")
         If UBound(SP) = -1 Then
             emes += hd + XYS + "座標は|で区切って下さい。" + vbCrLf
