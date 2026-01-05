@@ -1,4 +1,4 @@
-﻿Public Class frmMain_SelMapObject
+Public Class frmMain_SelMapObject
     Dim CloseCancelF As Boolean
     Dim MapFileList() As String
     Dim attrData As clsAttrData
@@ -27,7 +27,7 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults(ByRef MapFileName As String, ByRef SelectObjects() As Integer, ByRef Time As strYMD)
+    Public Sub GetResults(ByRef MapFileName As String, ByRef SelectObjects() As Integer, ByRef Time As strYMD)
 
         MapFileName = SelMapfile
         If gbTime.Enabled = False Then
@@ -40,7 +40,7 @@
         For i As Integer = 0 To n - 1
             SelectObjects(i) = candidateObject(lbList.SelectedIndices(i))
         Next
-    End Function
+    End Sub
 
     Private Sub change_mapfile()
         SelMapfile = cboMapFile.Text
