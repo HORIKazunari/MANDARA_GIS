@@ -1,4 +1,4 @@
-﻿Public Class frmMain_Buffer
+Public Class frmMain_Buffer
     Private Enum bufMode
         Distance = 0
         ObjectInPolygon = 1
@@ -69,9 +69,9 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
+    Public Sub GetResults()
 
-    End Function
+    End Sub
 
     Private Sub cboHandledLayer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboHandledLayer.SelectedIndexChanged
 
@@ -200,15 +200,15 @@
                 BufferMode = bufMode.ParentObject
         End Select
 
-        Dim Buf2_Obj_Str() As String
+        Dim Buf2_Obj_Str() As String = Nothing
         If rbBufModeParentObject.Checked = True Then
             ReDim Buf2_Obj_Str(ObjnL1 - 1)
         End If
 
         Dim F_ObjectCount As Boolean
-        Dim ObjCount_STR() As String
-        Dim ObjName_STR() As String
-        Dim ObjName_Clip_STR() As String
+        Dim ObjCount_STR() As String = Nothing
+        Dim ObjName_STR() As String = Nothing
+        Dim ObjName_Clip_STR() As String = Nothing
         If chkObjectCount.Checked = True And chkObjectCount.Enabled = True Then
             F_ObjectCount = True
             ReDim ObjCount_STR(ObjnL1 - 1)
@@ -230,27 +230,19 @@
             F_objNameClipOut = False
         End If
 
-        Dim Rdn As Integer
+        Dim Rdn As Integer = 0
         Dim F_ObjectData As Boolean
         Dim RegistMode As registMode
-        Dim AggData As List(Of Object)
-        Dim Add() As Double
-        Dim Add2() As Double
-        Dim Inner_Object_Num() As Integer
-        Dim Inner_Object_Name() As String
-        Dim Shukei_V(,) As String
-        Dim Add_Data() As Integer
+        Dim AggData As List(Of Object) = Nothing
+        Dim Add() As Double = Nothing
+        Dim Add2() As Double = Nothing
+        Dim Inner_Object_Num() As Integer = Nothing
+        Dim Inner_Object_Name() As String = Nothing
+        Dim Shukei_V(,) As String = Nothing
+        Dim Add_Data() As Integer = Nothing
         If chkObjectData.Checked = True Then
             RegistMode = cboRegistMethod.SelectedIndex
             F_ObjectData = True
-            'Select Case True
-            '    Case rbRegAverage.Checked
-            '        RegistMode = frmMain_Buffer.registMode.average
-            '    Case rbRegSum.Checked
-            '        RegistMode = frmMain_Buffer.registMode.sum
-            '    Case rbRegStd.Checked
-            '        RegistMode = frmMain_Buffer.registMode.standard
-            'End Select
             Rdn = lbRegistData.SelectedIndices.Count
             ReDim Add_Data(Rdn - 1)
             lbRegistData.SelectedIndices.CopyTo(Add_Data, 0)
@@ -263,8 +255,6 @@
                     PlusDataNum += 1
                 End If
             Next
-            'ReDim Add(Rdn - 1)
-            'ReDim Add2(Rdn - 1)
             ReDim Inner_Object_Num(Rdn - 1)
             ReDim Shukei_V(PlusDataNum - 1, ObjnL1 - 1)
         Else
@@ -303,8 +293,6 @@
                         ndata.min = attrData.LayerData(L2).atrData.Data(Add_Data(k)).Statistics.Max
                         AggData.Add(ndata)
                     End If
-                    'Add(k) = 0
-                    'Add2(k) = 0
                     Inner_Object_Num(k) = 0
                 Next
             End If
@@ -480,7 +468,7 @@
         If F_ObjectData = True Then
             Dim TTL As String
             Dim UNT As String
-            Dim n As Integer
+            Dim n As Integer = 0
             For i As Integer = 0 To Rdn - 1
                 Dim k As Integer = Add_Data(i)
                 TTL = attrData.LayerData(L2).Name & "：" & attrData.Get_DataTitle(L2, k, False)
@@ -513,15 +501,6 @@
                         n += attrData.Get_DivNum(L2, k) + 1
                     Else
                         TTL += "：" + cboRegistMethod.Text
-                        'Select Case RegistMode
-                        '    Case 0
-                        '        TTL += "：平均値"
-                        '    Case 1
-                        '        TTL += "：合計値"
-                        '    Case 2
-                        '        TTL += "：標準偏差"
-                        '        UNT = ""
-                        'End Select
                         Dim Data_Val_STR(ObjnL1 - 1) As String
                         For j As Integer = 0 To ObjnL1 - 1
                             Data_Val_STR(j) = Shukei_V(n, j)

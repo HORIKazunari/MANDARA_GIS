@@ -439,8 +439,8 @@ Public Class frmMED_TimeObjectSet
 
         Dim hd As String = (Gyo + 1).ToString + ":"
         Dim emes As String = ""
-        Dim cd1 As Integer
-        Dim StacP As Integer
+        Dim cd1 As Integer = -1
+        Dim StacP As Integer = 0
         If oldname = "" Then
             emes += hd + "変更オブジェクト名が指定されていません。" + vbCrLf
             ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
@@ -451,20 +451,21 @@ Public Class frmMED_TimeObjectSet
                 ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
             End If
         End If
-        Dim Data As ChangeName_Info = Nothing
+
         If newname = "" Then
             emes += hd + "新しいオブジェクト名が指定されていません。" + vbCrLf
             ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
-        Else
-            If emes = "" Then
-                If checkObjectNameListNum(newname, MapData.MPObj(cd1).Kind, emes, hd, Data.NewObjNameList) = True Then
-                    With Data
-                        .NameTimeStacPoint = StacP
-                        .DestObjCode = cd1
-                        .Time = T
-                    End With
-                    AllData.Add(Data)
-                End If
+        End If
+
+        If emes = "" Then
+            Dim Data As ChangeName_Info = Nothing
+            If checkObjectNameListNum(newname, MapData.MPObj(cd1).Kind, emes, hd, Data.NewObjNameList) = True Then
+                With Data
+                    .NameTimeStacPoint = StacP
+                    .DestObjCode = cd1
+                    .Time = T
+                End With
+                AllData.Add(Data)
             End If
         End If
         Msg += emes
@@ -689,7 +690,7 @@ Public Class frmMED_TimeObjectSet
 
         Dim hd As String = (Gyo + 1).ToString + ":"
         Dim emes As String = ""
-        Dim cd1 As Integer
+        Dim cd1 As Integer = -1
         If OriginObjname = "" Then
             emes += hd + "元オブジェクトが指定されていません。" + vbCrLf
             ktGrid.GridColor(0, 2, Gyo) = Color.Yellow
@@ -718,17 +719,17 @@ Public Class frmMED_TimeObjectSet
                     emes += hd + "新しいオブジェクト名が指定されていません。" + vbCrLf
                     ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
                 Else
-                    Dim Data As ChangeObjGroup_Info
-                    With Data
-                        If checkObjectNameListNum(NewObjName, newObjGNumber, emes, hd, .NewObjNameList) = False Then
-                            ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
-                        Else
+                    Dim Data As ChangeObjGroup_Info = Nothing
+                    If checkObjectNameListNum(NewObjName, newObjGNumber, emes, hd, Data.NewObjNameList) = True Then
+                        With Data
                             .Time = T
                             .OriginObjCode = cd1
                             .NewObjGroup = newObjGNumber
-                        End If
-                    End With
-                    AllData.Add(Data)
+                        End With
+                        AllData.Add(Data)
+                    Else
+                        ktGrid.GridColor(0, 3, Gyo) = Color.Yellow
+                    End If
                 End If
             End If
         End If

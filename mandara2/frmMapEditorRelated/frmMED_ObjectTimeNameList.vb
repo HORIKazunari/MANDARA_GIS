@@ -1,4 +1,4 @@
-﻿Public Class frmMED_ObjectTimeNameList
+Public Class frmMED_ObjectTimeNameList
     Private Structure NameListInfo
         Public Name As String
         Public Origin As Integer
@@ -49,6 +49,7 @@
             NameList(i) = itm.Name
             Convert(i) = itm.Origin
         Next
+        Return ObjectGroup
     End Function
 
     Private Sub lbName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbName.SelectedIndexChanged
