@@ -1,4 +1,4 @@
-﻿Public Class frmUserTileMap
+Public Class frmUserTileMap
     Dim CloseCancelF As Boolean
     Dim UserTile As List(Of strTileMapData_Info)
     Dim TileMap As clsTileMapService
@@ -45,12 +45,12 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults() As clsTileMapService
+    Public Sub GetResults()
         TileMap.RemoveTileMapListByTag("ユーザー設定タイルマップ")
         For i As Integer = 0 To UserTile.Count - 1
             TileMap.AddTileMap(UserTile(i))
         Next
-    End Function
+    End Sub
 
 
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
@@ -65,7 +65,7 @@
             Next
             uname = clsGeneric.Get_New_Numbering_Strings("ユーザー定義タイル", name)
         End If
-        Dim Tile As strTileMapData_Info
+        Dim Tile As New strTileMapData_Info()
         With Tile
             .Name = uname
             .ReverseF = False

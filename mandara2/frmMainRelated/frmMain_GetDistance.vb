@@ -1,4 +1,4 @@
-﻿Public Class frmMain_GetDistance
+Public Class frmMain_GetDistance
 
     Dim CloseCancelF As Boolean
     Dim attrData As clsAttrData
@@ -45,16 +45,16 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
+    Public Sub GetResults()
 
-    End Function
+    End Sub
 
     Private Sub btnLayerObject_Click(sender As Object, e As EventArgs) Handles btnLayerObject.Click
         Dim form As New frmMain_LayeObjectSelect
         If form.ShowDialog(attrData, SelectionMode.MultiExtended, True, LayerNum, Nothing, False) = Windows.Forms.DialogResult.OK Then
-            Dim sel() As Integer
-            Dim Lay As Integer
-            Dim DummyF As Boolean
+            Dim sel() As Integer = Nothing
+            Dim Lay As Integer = 0
+            Dim DummyF As Boolean = False
             form.getResult(Lay, sel, DummyF)
             For i As Integer = 0 To sel.Length - 1
                 Dim tx As String = ""
@@ -63,7 +63,7 @@
                 End If
                 If DummyF = False Then
                     tx += attrData.Get_KenObjName(Lay, sel(i))
-                    Dim posd As pos_info
+                    Dim posd As New pos_info()
                     posd.type = DisType.LayerObject
                     posd.lay = Lay
                     posd.objpos = sel(i)
@@ -71,7 +71,7 @@
                 Else
                     With attrData.LayerData(Lay).Dummy.DummyObj(sel(i))
                         tx += .Name
-                        Dim posd As pos_info
+                        Dim posd As New pos_info()
                         posd.type = DisType.LayerDummy
                         posd.lay = Lay
                         posd.objpos = .code
@@ -83,26 +83,12 @@
         End If
     End Sub
 
-    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
-        Dim n As Integer = lbList.SelectedIndices.Count
-        If n = 0 Then
-            MsgBox("削除対象を選択して下さい。", MsgBoxStyle.Exclamation)
-            Return
-        End If
-        For i As Integer = lbList.Items.Count - 1 To 0 Step -1
-            If lbList.GetSelected(i) = True Then
-                lbList.Items.RemoveAt(i)
-                pos.RemoveAt(i)
-            End If
-        Next
-    End Sub
-
     Private Sub btnLatLon_Click(sender As Object, e As EventArgs) Handles btnLatLon.Click
         Dim latlon As strLatLon
         If clsGeneric.Get_LatLon(latlon, clsSettings.Data.Ido_Kedo_Print_Pattern, True) = True Then
             Dim s As strPointStrings = clsGeneric.Get_LatLon_Strings(latlon, True)
             lbList.Items.Add(s.x + "/" + s.y)
-            Dim posd As pos_info
+            Dim posd As New pos_info()
             posd.xy = latlon.toPointF
             posd.type = DisType.Point
             pos.Add(posd)
@@ -125,7 +111,7 @@
         Dim ProgN As Integer = 0
         Dim dis(n - 1, objn - 1) As Single
         Dim allD As Single
- 
+
 
         For i As Integer = 0 To n - 1
             For j As Integer = 0 To objn - 1
@@ -216,12 +202,12 @@
     Private Sub btnObject_Click(sender As Object, e As EventArgs) Handles btnObject.Click
         Dim form As New frmMain_SelMapObject
         If form.ShowDialog(attrData, SelectionMode.MultiExtended) = Windows.Forms.DialogResult.OK Then
-            Dim SelObj() As Integer
-            Dim Time As strYMD
-            Dim MapFIle As String
+            Dim SelObj() As Integer = Nothing
+            Dim Time As New strYMD()
+            Dim MapFIle As String = ""
             form.GetResults(MapFIle, SelObj, Time)
             For i As Integer = 0 To SelObj.Length - 1
-                Dim posd As pos_info
+                Dim posd As New pos_info()
                 posd.type = DisType.MapObject
                 posd.MapFile = MapFIle
                 posd.Time = Time

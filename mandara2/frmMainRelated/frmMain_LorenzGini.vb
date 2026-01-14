@@ -141,7 +141,7 @@ Public Class frmMain_LorenzGini
         stfV.Dispose()
     End Sub
     Private Sub culcuData(ByRef g As Graphics)
-        Dim xValue() As Double
+        Dim xValue() As Double = Nothing
         Dim xMisF() As Boolean = Nothing
         Dim o_n As Integer = attrData.Get_ObjectNum(LayerNum)
         Select Case True
