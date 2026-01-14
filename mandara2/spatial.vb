@@ -1,4 +1,4 @@
-﻿Public Enum enmShape
+Public Enum enmShape
     NotDeffinition = -1
     PointShape = 0
     LineShape = 1
@@ -306,7 +306,7 @@ Public Class spatial
     ''' <remarks></remarks>
     Public Shared Function Check_Zahyo_Projection_Convert_Enabled(ByVal OriginMap As clsMapData.Zahyo_info, ByVal ConvertMap As clsMapData.Zahyo_info, ByRef Emes As String) As Boolean
         Emes = ""
-        If (OriginMap.Mode = enmZahyo_mode_info.Zahyo_No_Mode And ConvertMap.Mode <> enmZahyo_mode_info.Zahyo_No_Mode) Or _
+        If (OriginMap.Mode = enmZahyo_mode_info.Zahyo_No_Mode And ConvertMap.Mode <> enmZahyo_mode_info.Zahyo_No_Mode) Or
             (OriginMap.Mode <> enmZahyo_mode_info.Zahyo_No_Mode And ConvertMap.Mode = enmZahyo_mode_info.Zahyo_No_Mode) Then
             Emes = "座標系の設定していないデータと、設定してあるデータを重ねることはできません。"
             Return False
@@ -924,9 +924,9 @@ Public Class spatial
     ''' <param name="Nearest_pointY"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Overloads Shared Function Distance_PointLine(ByVal X As Single, ByVal Y As Single, _
-                                              ByVal ax As Single, ByVal ay As Single, _
-                                              ByVal BX As Single, ByVal BY As Single, _
+    Public Overloads Shared Function Distance_PointLine(ByVal X As Single, ByVal Y As Single,
+                                              ByVal ax As Single, ByVal ay As Single,
+                                              ByVal BX As Single, ByVal BY As Single,
                                               Optional ByRef Nearest_pointX As Single = 0, Optional ByRef Nearest_pointY As Single = 0) As Single
         Dim D As Single
 
@@ -1253,7 +1253,7 @@ Public Class spatial
             '        sin_an = Sqr(1 - cos_an ^ 2)
             '        ag = Angle(sin_an, cos_an)
             '        Distance_Ido_Kedo = EarthR * PI * (ag / 180)
-            DV = Math.Sqrt((Math.Cos((Ido1 + Ido2) * Math.PI / 180 / 2) * Math.Sin((Kedo1 - Kedo2) * Math.PI / 180 / 2)) ^ 2 + _
+            DV = Math.Sqrt((Math.Cos((Ido1 + Ido2) * Math.PI / 180 / 2) * Math.Sin((Kedo1 - Kedo2) * Math.PI / 180 / 2)) ^ 2 +
                         (Math.Sin((Ido1 - Ido2) * Math.PI / 180 / 2) * Math.Cos((Kedo1 - Kedo2) * Math.PI / 180 / 2)) ^ 2)
 
             Return 2 * EarthR * Math.Atan(DV / Math.Sqrt(-DV * DV + 1))
@@ -1369,7 +1369,7 @@ Public Class spatial
                     Select Case .Projection
                         Case enmProjection_Info.prjSeikyoEntou
                             '正距円筒
-                            Return New PointF(EarthR * (ox - .CenterXY.X) * Math.PI / 180, _
+                            Return New PointF(EarthR * (ox - .CenterXY.X) * Math.PI / 180,
                                              -EarthR * oy * Math.PI / 180)
                         Case enmProjection_Info.prjMercator
                             'メルカトル
@@ -1384,15 +1384,15 @@ Public Class spatial
                             Return newP
                         Case enmProjection_Info.prjMiller
                             'ミラー
-                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180), _
+                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180),
                                       -EarthR * Math.Log(Math.Tan((45 + oy * 2 / 5) * Math.PI / 180)) * 1.25)
                         Case enmProjection_Info.prjLambertSeisekiEntou
                             'ランベルト正積円筒図法
-                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180), _
+                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180),
                                         -EarthR * Math.Sin(oy * Math.PI / 180))
                         Case enmProjection_Info.prjSanson
                             'サンソン
-                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180) * Math.Cos(oy * Math.PI / 180), _
+                            Return New PointF(EarthR * ((ox - .CenterXY.X) * Math.PI / 180) * Math.Cos(oy * Math.PI / 180),
                                                 -EarthR * oy * Math.PI / 180)
                         Case enmProjection_Info.prjMollweide
                             'モルワイデ図法
@@ -1527,17 +1527,17 @@ Public Class spatial
                             Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI * Math.Cos(y * Math.PI / 180)), y)
                         Case enmProjection_Info.prjSeikyoEntou
                             '正距円筒
-                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI), _
+                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI),
                                             -oy / EarthR * 180 / Math.PI)
                         Case enmProjection_Info.prjMercator
                             'メルカトル
                             Dim tx As Single = Math.Exp(-oy / EarthR)
-                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI), _
+                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI),
                                             2 * Math.Atan(tx) * 180 / Math.PI - 90)
                         Case enmProjection_Info.prjMiller
                             'ミラー
                             Dim tx As Single = Math.Exp(-oy / (EarthR * 1.25))
-                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI), _
+                            Return New PointF(.CenterXY.X + (ox * 180) / (EarthR * Math.PI),
                                             Math.Atan(tx) * 5 / 2 * 180 / Math.PI - 45 * 5 / 2)
                         Case enmProjection_Info.prjLambertSeisekiEntou
                             'ランベルト正積円筒図法
@@ -1647,6 +1647,11 @@ Public Class spatial
                 Else
                     Return False
                 End If
+            Case Else
+                ' サポートされていない投影法
+                x = 0
+                y = 0
+                Return False
         End Select
     End Function
     ''' <summary>
@@ -1902,7 +1907,7 @@ Public Class spatial
     ''' <param name="PolyLine">ポリゴンを構成するPointF構造体配列のArrayList</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Shared Function check_Point_in_Polygon(ByVal checkPoint As PointF, ByRef PolyLine As List(Of PointF()), _
+    Public Shared Function check_Point_in_Polygon(ByVal checkPoint As PointF, ByRef PolyLine As List(Of PointF()),
                                                   Optional ByRef CrossPointN As Integer = 0, Optional ByRef CrossPoint_X() As Single = Nothing) As Boolean
 
         ReDim CrossPoint_X(0)
@@ -2089,6 +2094,9 @@ Public Class spatial
                 Return secondMeshCode
             Case enmMesh_Number.mhThird
                 Return thirdMeshCode
+            Case Else
+                ' サポートされていないメッシュ番号
+                Return Nothing
         End Select
     End Function
     ''' <summary>
@@ -2251,7 +2259,7 @@ Public Class spatial
         Dim by2 As Single = LBP2.Y
 
         '２点が同一、または２線が平行の場合は戻る
-        If (ax2 = ax1 And bx2 = bx1) Or (ay2 = ay1 And by2 = by1) Or _
+        If (ax2 = ax1 And bx2 = bx1) Or (ay2 = ay1 And by2 = by1) Or
             (ax1 = bx1 And ay1 = by1) Or (ax2 = bx1 And ay2 = by1) Or (ax1 = bx2 And ay1 = by2) Or (ax2 = bx2 And ay2 = by2) Then
             Return False
         End If
@@ -2348,7 +2356,7 @@ Public Class spatial
     ''' <remarks></remarks>
     Public Shared Function Check_Two_Line_Cross(ByVal Line1() As PointF, ByVal Line2() As PointF,
                                                 ByVal Line1PointNum As Integer, ByVal Line2PointNum As Integer,
-                                               ByRef CrossPointNum1 As Integer, ByRef CrossPointNum2 As Integer, _
+                                               ByRef CrossPointNum1 As Integer, ByRef CrossPointNum2 As Integer,
                                                 ByRef CrossData1() As Cross_Line_Data, ByRef CrossData2() As Cross_Line_Data) As Boolean
         Dim Line1Rect As RectangleF = Get_Circumscribed_Rectangle(Line1, 0, Line1PointNum)
         Dim Line2Rect As RectangleF = Get_Circumscribed_Rectangle(Line2, 0, Line2PointNum)
@@ -2373,7 +2381,7 @@ Public Class spatial
     Public Shared Function Check_Two_Line_Cross(ByVal Line1() As PointF, ByVal Line2() As PointF,
                                                 ByVal Line1PointNum As Integer, ByVal Line2PointNum As Integer,
                                                 ByVal Line1Rect As RectangleF, ByVal Line2Rect As RectangleF,
-                                               ByRef CrossPointNum1 As Integer, ByRef CrossPointNum2 As Integer, _
+                                               ByRef CrossPointNum1 As Integer, ByRef CrossPointNum2 As Integer,
                                                 ByRef CrossData1() As Cross_Line_Data, ByRef CrossData2() As Cross_Line_Data) As Boolean
 
         If Compare_Two_Rectangle_Position(Line1Rect, Line2Rect) = cstRectangle_Cross.cstOuter Then
@@ -2522,7 +2530,7 @@ Public Class spatial
                     Dim cp As PointF
                     Dim f As Boolean = Line_Cross_Point(cp, Line1(i), Line1(i + 1), Line2(k), Line2(k + 1))
                     If f = True Then
-                        If (i = 0 And cp.X = Line1(i).X And cp.Y = Line1(i).Y) Or _
+                        If (i = 0 And cp.X = Line1(i).X And cp.Y = Line1(i).Y) Or
                             (i = Line1PointNum - 2 And cp.X = Line1(i + 1).X And cp.Y = Line1(i + 1).Y) Then
                         Else
                             If UBound(CrossData1) < CP1 Then

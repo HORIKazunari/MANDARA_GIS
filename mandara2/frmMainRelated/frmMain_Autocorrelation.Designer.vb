@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class frmMain_Autocorrelation
     Inherits System.Windows.Forms.Form
 
@@ -22,17 +22,11 @@ Partial Class frmMain_Autocorrelation
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.lbYData = New mandara10.ListBoxEx()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.ListBoxEx = New mandara10.ListBoxEx()
-        Me.ListViewEX = New mandara10.ListViewEX()
         Me.btnGetNeighboutObj = New System.Windows.Forms.Button()
         Me.btnTextCopy = New System.Windows.Forms.Button()
-        Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnCancel
@@ -48,7 +42,6 @@ Partial Class frmMain_Autocorrelation
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.lbYData)
         Me.GroupBox1.Location = New System.Drawing.Point(-311, 39)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(190, 151)
@@ -56,50 +49,14 @@ Partial Class frmMain_Autocorrelation
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "縦軸データ"
         '
-        'lbYData
-        '
-        Me.lbYData.AsteriskSelectEnabled = False
-        Me.lbYData.FormattingEnabled = True
-        Me.lbYData.ItemHeight = 12
-        Me.lbYData.Location = New System.Drawing.Point(12, 18)
-        Me.lbYData.Name = "lbYData"
-        Me.lbYData.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lbYData.Size = New System.Drawing.Size(163, 124)
-        Me.lbYData.TabIndex = 55
-        '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.ListBoxEx)
         Me.GroupBox2.Location = New System.Drawing.Point(18, 30)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(190, 151)
         Me.GroupBox2.TabIndex = 10
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "対象データ"
-        '
-        'ListBoxEx
-        '
-        Me.ListBoxEx.AsteriskSelectEnabled = False
-        Me.ListBoxEx.FormattingEnabled = True
-        Me.ListBoxEx.ItemHeight = 12
-        Me.ListBoxEx.Location = New System.Drawing.Point(12, 18)
-        Me.ListBoxEx.Name = "ListBoxEx"
-        Me.ListBoxEx.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBoxEx.Size = New System.Drawing.Size(163, 124)
-        Me.ListBoxEx.TabIndex = 55
-        '
-        'ListViewEX
-        '
-        Me.ListViewEX.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListViewEX.GridLines = True
-        Me.ListViewEX.Location = New System.Drawing.Point(227, 30)
-        Me.ListViewEX.Name = "ListViewEX"
-        Me.ListViewEX.Size = New System.Drawing.Size(247, 234)
-        Me.ListViewEX.TabIndex = 11
-        Me.ListViewEX.UseCompatibleStateImageBehavior = False
-        Me.ListViewEX.View = System.Windows.Forms.View.Details
         '
         'btnGetNeighboutObj
         '
@@ -127,7 +84,6 @@ Partial Class frmMain_Autocorrelation
         Me.ClientSize = New System.Drawing.Size(496, 315)
         Me.Controls.Add(Me.btnTextCopy)
         Me.Controls.Add(Me.btnGetNeighboutObj)
-        Me.Controls.Add(Me.ListViewEX)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btnCancel)
@@ -138,8 +94,7 @@ Partial Class frmMain_Autocorrelation
         Me.Name = "frmMain_Autocorrelation"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "空間的自己相関分析"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
+        AddHandler Load, AddressOf Me.frmMain_Autocorrelation_Load
         Me.ResumeLayout(False)
 
     End Sub

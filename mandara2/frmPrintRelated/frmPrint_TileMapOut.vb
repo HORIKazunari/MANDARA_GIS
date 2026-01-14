@@ -1,4 +1,4 @@
-﻿Public Class frmPrint_TileMapOut
+Public Class frmPrint_TileMapOut
     Dim CloseCancelF As Boolean
     Dim attr As clsAttrData
     Dim StopButton As Boolean
@@ -352,7 +352,7 @@
     End Sub
     Private Function OutputSampleHTML(ByVal Folder As String, ByVal MaxZoom As Integer, ByVal MinZoom As Integer, _
                             ByVal latlonBox As strLatLonBox, ByVal ext As String) As Boolean
-        Const adTypeText = 2, adSaveCreateOverwrite = 2
+        ' 未使用定数を削除
         Dim objStream_html As Object
 
         Dim T As New System.Text.StringBuilder()
