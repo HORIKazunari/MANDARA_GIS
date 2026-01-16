@@ -104,6 +104,9 @@ bld/
 *.vspx
 *.sap
 
+# Power Shell Scripts for Error Correction
+*.ps1
+
 # ReSharper
 _ReSharper*/
 *.[Rr]e[Ss]harper
