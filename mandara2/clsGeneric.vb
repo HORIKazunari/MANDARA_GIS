@@ -1,4 +1,4 @@
-﻿Public Enum enmHelpFile
+Public Enum enmHelpFile
     About
     Index
     MapEditor
@@ -544,6 +544,7 @@ Public Structure Cross_Line_Data_Info
             Case 5
                 Return Me.XLineParts5
         End Select
+        Return Nothing
     End Function
     Public Sub Set_CrossLineParts(ByVal n As Integer, ByVal Value As Optional_X_Line_Data_info)
         Select Case n
@@ -1743,27 +1744,33 @@ Public Class clsGeneric
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function SaveEMFFile(ByVal FileName As String, ByRef attrdata As clsAttrData, ByVal prog As ToolStripProgressBar,
-                                       ByRef frmPrint As frmPrint)
-        'Metafileオブジェクトを作成する
-        Dim bmp As New Bitmap(10, 10)
-        Dim bmpg As Graphics = Graphics.FromImage(bmp)
-        Dim hdc As IntPtr = bmpg.GetHdc()
-        Dim rec As New Rectangle(0, 0, attrdata.TotalData.ViewStyle.ScrData.frmPrint_FormSize.Width, attrdata.TotalData.ViewStyle.ScrData.frmPrint_FormSize.Height)
-        Dim meta As New System.Drawing.Imaging.Metafile(FileName, hdc, rec, Imaging.MetafileFrameUnit.Pixel, System.Drawing.Imaging.EmfType.EmfOnly)
-        bmpg.ReleaseHdc(hdc)
-        'Metafileに描画する
-        Dim emfg As Graphics = Graphics.FromImage(meta)
-        If attrdata.TotalData.LV1.Print_Mode_Total = enmTotalMode_Number.SeriesMode Then
-            frmPrint.Series_Mapping(emfg, prog, False)
-        Else
-            clsPrintMap.ShowMap(emfg, prog, attrdata)
-        End If
-        emfg.Dispose()
+                                   ByRef frmPrint As frmPrint) As Boolean
+        Try
+            'Metafileオブジェクトを作成する
+            Dim bmp As New Bitmap(10, 10)
+            Dim bmpg As Graphics = Graphics.FromImage(bmp)
+            Dim hdc As IntPtr = bmpg.GetHdc()
+            Dim rec As New Rectangle(0, 0, attrdata.TotalData.ViewStyle.ScrData.frmPrint_FormSize.Width, attrdata.TotalData.ViewStyle.ScrData.frmPrint_FormSize.Height)
+            Dim meta As New System.Drawing.Imaging.Metafile(FileName, hdc, rec, Imaging.MetafileFrameUnit.Pixel, System.Drawing.Imaging.EmfType.EmfOnly)
+            bmpg.ReleaseHdc(hdc)
+            'Metafileに描画する
+            Dim emfg As Graphics = Graphics.FromImage(meta)
+            If attrdata.TotalData.LV1.Print_Mode_Total = enmTotalMode_Number.SeriesMode Then
+                frmPrint.Series_Mapping(emfg, prog, False)
+            Else
+                clsPrintMap.ShowMap(emfg, prog, attrdata)
+            End If
+            emfg.Dispose()
 
-        '後片付け
-        meta.Dispose()
-        bmpg.Dispose()
-        bmp.Dispose()
+            '後片付け
+            meta.Dispose()
+            bmpg.Dispose()
+            bmp.Dispose()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
     End Function
     ''' <summary>
     ''' 連続表示モードのデータセットをリストビューに入れる
@@ -2035,26 +2042,34 @@ Public Class clsGeneric
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function Get_LatLon(ByRef LatLon As strLatLon, ByVal Pattern As enmLatLonPrintPattern, ByVal BoxF As Boolean) As Boolean
-
         Select Case Pattern
             Case enmLatLonPrintPattern.DecimalDegree
-                Dim f As Boolean = False
                 Dim form As New frmLatLonInput10
-                If form.ShowDialog(LatLon, BoxF) = DialogResult.OK Then
-                    LatLon = form.getResults
-                    f = True
-                End If
-                form.Close()
-                Return f
+                Try
+                    If form.ShowDialog(LatLon, BoxF) = DialogResult.OK Then
+                        LatLon = form.getResults
+                        Return True
+                    End If
+                    Return False
+                Finally
+                    form.Dispose()
+                End Try
+
             Case enmLatLonPrintPattern.DegreeMinuteSecond
-                Dim f As Boolean = False
                 Dim form As New frmLatLonInputDMS
-                If form.ShowDialog(LatLon, BoxF) = DialogResult.OK Then
-                    LatLon = form.getResults
-                    f = True
-                End If
-                form.Close()
-                Return f
+                Try
+                    If form.ShowDialog(LatLon, BoxF) = DialogResult.OK Then
+                        LatLon = form.getResults
+                        Return True
+                    End If
+                    Return False
+                Finally
+                    form.Dispose()
+                End Try
+
+            Case Else
+                ' 想定外のパターンの場合はFalseを返す
+                Return False
         End Select
     End Function
     ''' <summary>
@@ -2382,6 +2397,7 @@ Public Class clsGeneric
             Case enmMapFolder_Default_info.LastAccesedFolder
                 Return clsSettings.Data.Directory.Mapfile
         End Select
+        Return String.Empty
     End Function
 
     ''' <summary>
@@ -3233,6 +3249,7 @@ Public Class clsGeneric
         Else
             form.Show(Owner, Title, ListData, VariType, SortingFlag, RowNumberFlag)
         End If
+        Return DialogResult.OK
     End Function
     ''' <summary>
     ''' テキスト形式でメッセージを表示
@@ -3256,6 +3273,7 @@ Public Class clsGeneric
         Else
             form.Show(Owner, Title, MessageText, ReadOnlyF)
         End If
+        Return DialogResult.OK
     End Function
     ''' <summary>
     ''' グリッド形式でメッセージを表示
@@ -3272,7 +3290,7 @@ Public Class clsGeneric
         form.Size = New Size(s.Bounds.Width / 2, s.Bounds.Height / 2)
         form.StartPosition = FormStartPosition.CenterScreen
         form.ShowDialog(Owner, Title, Grid)
-
+        Return DialogResult.OK
     End Function
     ''' <summary>
     ''' オブジェクト名の漢字を統一する。比較する漢字が含まれていた場合にtrue
@@ -3636,6 +3654,7 @@ Public Class clsGeneric
             Case clsAttrData.enmCondition.Foot
                 Return "末尾の文字"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 文字列配列をチェックして「新規1」「新規2」など連番を付ける
@@ -3795,7 +3814,7 @@ Public Class clsGeneric
                 Next
                 Return RetCut
         End Select
-
+        Return Nothing
     End Function
     ''' <summary>
     ''' 指定の文字で区切って二次元配列にに
@@ -4068,6 +4087,7 @@ Public Class clsGeneric
             Case 1
                 Return ScrData.MapScreen_Scale.Contains(P.X, P.Y)
         End Select
+        Return False
     End Function
     ''' <summary>
     ''' 単独表示モードの文字列を返す
@@ -4098,6 +4118,7 @@ Public Class clsGeneric
             Case enmSoloMode_Number.StringMode
                 Return "文字"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' メッシュコードの文字の長さを取得
@@ -4150,6 +4171,7 @@ Public Class clsGeneric
             Case enmMesh_Number.mhOne_Tenth
                 Return "1/10メッシュ"
         End Select
+        Return enmMesh_Number.mhNonMesh
     End Function
     ''' <summary>
     ''' 名称からメッシュコードタイプを取得
@@ -4176,6 +4198,7 @@ Public Class clsGeneric
             Case "1/10メッシュ"
                 Return enmMesh_Number.mhOne_Tenth
         End Select
+        Return enmMesh_Number.mhNonMesh
     End Function
     ''' <summary>
     ''' 投影法に対応した文字列を返す
@@ -4202,6 +4225,7 @@ Public Class clsGeneric
             Case enmProjection_Info.prjEckert4
                 Return "エッケルト第４図法"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 文字列に対応した対応した投影法列挙型を返す
@@ -4228,6 +4252,7 @@ Public Class clsGeneric
             Case "エッケルト第４図法"
                 Return enmProjection_Info.prjEckert4
         End Select
+        Return enmProjection_Info.prjNo
     End Function
     ''' <summary>
     ''' 座標系に対応した文字列を返す
@@ -4246,7 +4271,7 @@ Public Class clsGeneric
                     Return "平面直角座標系" & .HeimenTyokkaku_KEI_Number
             End Select
         End With
-
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 測地系に対応した文字列を返す
@@ -4262,8 +4287,8 @@ Public Class clsGeneric
                 Return "日本測地系"
             Case enmZahyo_System_Info.Zahyo_System_World
                 Return "世界測地系"
-
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 座標系に対応したX座標の文字列を返す
@@ -4280,6 +4305,7 @@ Public Class clsGeneric
             Case enmZahyo_mode_info.Zahyo_HeimenTyokkaku
                 Return "Y"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 座標モードに対応したY座標の文字列を返す
@@ -4296,6 +4322,7 @@ Public Class clsGeneric
             Case enmZahyo_mode_info.Zahyo_HeimenTyokkaku
                 Return "X"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' '形状列挙型からその文字を返す
@@ -4315,6 +4342,7 @@ Public Class clsGeneric
             Case enmShape.NotDeffinition
                 Return "未指定" '本当はこれは出現しない
         End Select
+        Return String.Empty
     End Function
     Public Overloads Shared Function ConvertShapeEnumString(ByVal shape As String) As enmShape
 
@@ -4328,6 +4356,7 @@ Public Class clsGeneric
             Case "未指定"
                 Return enmShape.NotDeffinition
         End Select
+        Return enmShape.NotDeffinition
     End Function
     ''' <summary>
     ''' 属性データタイプ列挙型から文字を返す
@@ -4361,6 +4390,7 @@ Public Class clsGeneric
             Case Else
                 Return "その他" '本当はこれは出現しない
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 属性データタイプの文字から列挙型を返す
@@ -4393,6 +4423,7 @@ Public Class clsGeneric
                 Return enmAttDataType.Departure
             Case "その他"
         End Select
+        Return enmAttDataType.Normal
     End Function
     ''' <summary>
     ''' タイトル、単位から属性データタイプ列挙型を返す
@@ -4487,6 +4518,7 @@ Public Class clsGeneric
             Case clsAttrData.enmLayerType.Trip_Definition
                 Return "移動主体定義レイヤ"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' レイヤタイプ文字列からレイヤタイプ定数を返す
@@ -4507,6 +4539,7 @@ Public Class clsGeneric
             Case "移動主体定義レイヤ"
                 Return clsAttrData.enmLayerType.Trip_Definition
         End Select
+        Return clsAttrData.enmLayerType.Normal
     End Function
 
     ''' <summary>
@@ -4522,6 +4555,7 @@ Public Class clsGeneric
             Case False
                 Return "0または空白"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 属性データ編集で欠損値扱い欄の表示する文から値を返す
@@ -4536,6 +4570,7 @@ Public Class clsGeneric
             Case "0または空白"
                 Return False
         End Select
+        Return False
     End Function
     ''' <summary>
     ''' 初期属性時間属性のタイプの文字列を返す
@@ -4550,6 +4585,7 @@ Public Class clsGeneric
             Case clsMapData.enmDefTimeAttDataType.SpanData
                 Return "期間データ"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' ラインの端点列挙型からその文字を返す
@@ -4568,6 +4604,7 @@ Public Class clsGeneric
             Case enmLineConnect.loopen
                 Return "ループ"
         End Select
+        Return String.Empty
     End Function
     ''' <summary>
     ''' 距離単位列挙型から距離文字列を返す
