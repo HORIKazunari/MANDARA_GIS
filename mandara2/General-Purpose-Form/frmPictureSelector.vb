@@ -1,4 +1,4 @@
-﻿Public Class frmPictureSelector
+Public Class frmPictureSelector
     Dim attrData As clsAttrData
     Dim SelectNumber As Integer
     Private picBox() As System.Windows.Forms.PictureBox
@@ -76,7 +76,7 @@
         If SelectNumber <> -1 Then
             Me.picBox(SelectNumber).BorderStyle = BorderStyle.Fixed3D
             picSelectedImage.Image = attrData.TotalData.BasePicture.PictureData.Item(SelectNumber).GetBitmap
-            Dim picP As Picture_Property = DirectCast(attrData.TotalData.BasePicture.PictureData(SelectNumber), Picture_Property)
+            Dim picP As Picture_Property = attrData.TotalData.BasePicture.PictureData(SelectNumber)
             With picP
                 chkTransparencyColor.Checked = .TransParency_f
                 chkInnerColor.Checked = .Alternate_f
@@ -113,13 +113,13 @@
                     End If
                 Case TypeOf FigStac Is clsAttrData.strFig_Circle_data
                     Dim FigData As clsAttrData.strFig_Circle_data = DirectCast(FigStac, clsAttrData.strFig_Circle_data)
-                    If Check_Use_Mark_PicureNumber(FigData.Mark, Num) Or _
+                    If Check_Use_Mark_PicureNumber(FigData.Mark, Num) Or
                          Check_Use_TileMark_PicureNumber(FigData.Tile, Num) = True Then
                         a2 += "図形モード：円／図形番号：" & CStr(i) & vbCrLf
                     End If
                 Case TypeOf FigStac Is clsAttrData.strFig_Point_Data
                     Dim FigData As clsAttrData.strFig_Point_Data = DirectCast(FigStac, clsAttrData.strFig_Point_Data)
-                    If Check_Use_Mark_PicureNumber(FigData.Mark, Num) = True Or _
+                    If Check_Use_Mark_PicureNumber(FigData.Mark, Num) = True Or
                          Check_Use_FontMark_PicureNumber(FigData.Font, Num) = True Then
                         a2 += "図形モード：点／図形番号：" & CStr(i) & vbCrLf
                     End If
@@ -143,7 +143,7 @@
                         If Check_Use_Mark_PicureNumber(.SoloModeViewSettings.MarkBlockMD.Mark, Num) = True Then
                             a2 += "データ項目：" & .Title & "／記号の数モード" & vbCrLf
                         End If
-                        If Check_Use_Mark_PicureNumber(.SoloModeViewSettings.MarkSizeMD.Mark, Num) = True  Then
+                        If Check_Use_Mark_PicureNumber(.SoloModeViewSettings.MarkSizeMD.Mark, Num) = True Then
                             a2 += "データ項目：" & .Title & "／記号の大きさモード" & vbCrLf
                         End If
                         If Check_Use_Mark_PicureNumber(.SoloModeViewSettings.MarkTurnMD.Mark, Num) = True Then
@@ -170,12 +170,12 @@
             With attrData.LayerData(i).LayerModeViewSettings.LabelMode
                 For j As Integer = 0 To .Count - 1
                     With .DataSet(j)
-                        If Check_Use_Mark_PicureNumber(.Location_Mark, Num) = True Or _
-                             Check_Use_TileMark_PicureNumber(.BorderObjectTile, Num) = True Or _
-                             Check_Use_TileMark_PicureNumber(.BorderDataTile, Num) = True Or _
-                             Check_Use_FontMark_PicureNumber(.ObjectName_Font, Num) = True Or _
-                             Check_Use_FontMark_PicureNumber(.DataValue_Font, Num) = True Or _
-                             Check_Use_FontMark_PicureNumber(.Dummy_Object_Font, Num) = True Or _
+                        If Check_Use_Mark_PicureNumber(.Location_Mark, Num) = True Or
+                             Check_Use_TileMark_PicureNumber(.BorderObjectTile, Num) = True Or
+                             Check_Use_TileMark_PicureNumber(.BorderDataTile, Num) = True Or
+                             Check_Use_FontMark_PicureNumber(.ObjectName_Font, Num) = True Or
+                             Check_Use_FontMark_PicureNumber(.DataValue_Font, Num) = True Or
+                             Check_Use_FontMark_PicureNumber(.Dummy_Object_Font, Num) = True Or
                              Check_Use_FontMark_PicureNumber(.Dummy_Object_Group_Font, Num) = True Then
                             a2 += "ラベル表示モード：データセット：" & .title & vbCrLf
                         End If
@@ -197,11 +197,11 @@
 
         a2 = ""
         With attrData.TotalData.ViewStyle
-            If Check_Use_Mark_PicureNumber(.Missing_Data.BlockMark, Num) = True Or _
-                 Check_Use_Mark_PicureNumber(.Missing_Data.Mark, Num) = True Or _
-                 Check_Use_Mark_PicureNumber(.Missing_Data.ClassMark, Num) = True Or _
-                 Check_Use_Mark_PicureNumber(.Missing_Data.TurnMark, Num) = True Or _
-                 Check_Use_TileMark_PicureNumber(.Missing_Data.HatchTile, Num) = True Or _
+            If Check_Use_Mark_PicureNumber(.Missing_Data.BlockMark, Num) = True Or
+                 Check_Use_Mark_PicureNumber(.Missing_Data.Mark, Num) = True Or
+                 Check_Use_Mark_PicureNumber(.Missing_Data.ClassMark, Num) = True Or
+                 Check_Use_Mark_PicureNumber(.Missing_Data.TurnMark, Num) = True Or
+                 Check_Use_TileMark_PicureNumber(.Missing_Data.HatchTile, Num) = True Or
                  Check_Use_TileMark_PicureNumber(.Missing_Data.PaintTile, Num) = True Then
                 a2 += "欠損値の凡例" & vbCrLf
             End If
@@ -209,24 +209,24 @@
                 a2 += "方位記号" & vbCrLf
             End If
             With .Trip_Line
-                If Check_Use_Mark_PicureNumber(.StartPoint_Mark, Num) = True Or _
-                     Check_Use_Mark_PicureNumber(.EndPoint_Mark, Num) = True Or _
+                If Check_Use_Mark_PicureNumber(.StartPoint_Mark, Num) = True Or
+                     Check_Use_Mark_PicureNumber(.EndPoint_Mark, Num) = True Or
                      Check_Use_FontMark_PicureNumber(.TimeLegend_Font, Num) = True Then
                     a2 += "移動データオプション" & vbCrLf
                 End If
             End With
-            If Check_Use_TileMark_PicureNumber(.MapLegend.Base.Back.Tile, Num) = True Or _
+            If Check_Use_TileMark_PicureNumber(.MapLegend.Base.Back.Tile, Num) = True Or
                  Check_Use_FontMark_PicureNumber(.MapLegend.Base.Font, Num) = True Then
                 a2 += "凡例のフォント・背景" & vbCrLf
             End If
-            If Check_Use_TileMark_PicureNumber(.MapScale.Back.Tile, Num) = True Or _
+            If Check_Use_TileMark_PicureNumber(.MapScale.Back.Tile, Num) = True Or
                  Check_Use_FontMark_PicureNumber(.MapScale.Font, Num) = True Then
                 a2 += "スケールのフォント・背景" & vbCrLf
             End If
             If Check_Use_FontMark_PicureNumber(.MapTitle.Font, Num) = True Then
                 a2 += "タイトルのフォント" & vbCrLf
             End If
-            If Check_Use_TileMark_PicureNumber(.Screen_Back.ScreenAreaBack, Num) = True Or _
+            If Check_Use_TileMark_PicureNumber(.Screen_Back.ScreenAreaBack, Num) = True Or
                  Check_Use_TileMark_PicureNumber(.Screen_Back.MapAreaBack, Num) = True Or
                  Check_Use_TileMark_PicureNumber(.Screen_Back.ObjectInner, Num) Then
                 a2 += "地図の背景" & vbCrLf
@@ -234,11 +234,11 @@
         End With
         For Each d As clsAttrData.strScreen_Setting_Data_Info In attrData.TotalData.ViewStyle.Screen_Setting
             With d
-                If Check_Use_TileMark_PicureNumber(.MapScale.Back.Tile, Num) = True Or _
-                     Check_Use_Mark_PicureNumber(.AttMapCompass.Mark, Num) = True Or _
-                     Check_Use_FontMark_PicureNumber(.MapTitle.Font, Num) = True Or _
-                     Check_Use_FontMark_PicureNumber(.MapLegend.Base.Font, Num) = True Or _
-                     Check_Use_TileMark_PicureNumber(.MapLegend.Base.Back.Tile, Num) = True Or _
+                If Check_Use_TileMark_PicureNumber(.MapScale.Back.Tile, Num) = True Or
+                     Check_Use_Mark_PicureNumber(.AttMapCompass.Mark, Num) = True Or
+                     Check_Use_FontMark_PicureNumber(.MapTitle.Font, Num) = True Or
+                     Check_Use_FontMark_PicureNumber(.MapLegend.Base.Font, Num) = True Or
+                     Check_Use_TileMark_PicureNumber(.MapLegend.Base.Back.Tile, Num) = True Or
                      Check_Use_FontMark_PicureNumber(.MapScale.Font, Num) = True Then
                     a2 += "画面設定：" & .title & vbCrLf
                 End If
@@ -250,7 +250,7 @@
         Return a
     End Function
 
-  
+
     Private Function Check_Use_Mark_PicureNumber(ByRef MK As Mark_Property, ByVal CheckNum As Integer) As Boolean
         Dim f As Boolean
         f = False
@@ -384,13 +384,13 @@
     End Sub
 
     Private Sub chkTransparencyColor_CheckedChanged(sender As Object, e As EventArgs) Handles chkTransparencyColor.CheckedChanged
-        Dim picP As Picture_Property = DirectCast(attrData.TotalData.BasePicture.PictureData(SelectNumber), Picture_Property)
+        Dim picP As Picture_Property = attrData.TotalData.BasePicture.PictureData(SelectNumber)
         picP.TransParency_f = chkTransparencyColor.Checked
         attrData.TotalData.BasePicture.PictureData(SelectNumber) = picP
     End Sub
 
     Private Sub chkInnerColor_CheckedChanged(sender As Object, e As EventArgs) Handles chkInnerColor.CheckedChanged
-        Dim picP As Picture_Property = DirectCast(attrData.TotalData.BasePicture.PictureData(SelectNumber), Picture_Property)
+        Dim picP As Picture_Property = attrData.TotalData.BasePicture.PictureData(SelectNumber)
         picP.Alternate_f = chkInnerColor.Checked
         attrData.TotalData.BasePicture.PictureData(SelectNumber) = picP
 
@@ -403,7 +403,7 @@
         ElseIf v > 10 Then
             v = 10
         End If
-        Dim picP As Picture_Property = DirectCast(attrData.TotalData.BasePicture.PictureData(SelectNumber), Picture_Property)
+        Dim picP As Picture_Property = attrData.TotalData.BasePicture.PictureData(SelectNumber)
         picP.TransRange = v
         attrData.TotalData.BasePicture.PictureData(SelectNumber) = picP
     End Sub
