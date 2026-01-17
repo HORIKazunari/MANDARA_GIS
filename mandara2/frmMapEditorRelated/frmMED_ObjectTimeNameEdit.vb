@@ -1,4 +1,4 @@
-﻿Public Class frmMED_ObjectTimeNameEdit
+Public Class frmMED_ObjectTimeNameEdit
     Private Structure Obj_Info
         Public NameTimeStac() As clsMapData.Object_NameTimeStac_Data
         Public Kind As Integer
@@ -87,7 +87,7 @@
         Next
 
     End Sub
-    Public Function GetResults()
+    Public Sub GetResults()
         With MapData
             For i As Integer = 0 To .Map.OBKNum - 1
                 With .ObjectKind(i)
@@ -105,7 +105,7 @@
                 End With
             Next
         End With
-    End Function
+    End Sub
 
 
     ''' <summary>

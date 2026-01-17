@@ -1616,6 +1616,7 @@ Public Class clsPrintMap
         Dim f1 As Integer = Get_TripPosition(attrData, Layernum, Number, 2, P1, Z_Flag)
         Dim f2 As Integer = Get_TripPosition(attrData, Layernum, Number + 1, 1, P2, Z_Flag)
         If f1 = 0 And f2 = 0 Then
+            Return False
         Else
             Dim Set3D As Boolean = attrData.TotalData.ViewStyle.ScrData.ThreeDMode.Set3D_F
             Dim Trip_EndTime As DateTime = attrData.TempData.Trip_Temp.Trip_EndTime
@@ -1689,6 +1690,7 @@ Public Class clsPrintMap
                 End If
             End If
         End If
+        Return True
     End Function
     ''' <summary>
     ''' 戻り値は、-1/時間外より早い 0/時間内 1/時間より遅い
@@ -4162,6 +4164,7 @@ Public Class clsPrintMap
                     Next
             End Select
         End With
+        Return 0
     End Function
     ''' <summary>
     ''' 階級区分モードの点・面形状オブジェクトの線モード
@@ -5431,6 +5434,7 @@ Public Class clsPrintMap
                 End If
             Next
         End With
+        Return New Mark_Property()
     End Function
     ''' <summary>
     ''' 境界線描画

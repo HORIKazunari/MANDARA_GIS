@@ -1,4 +1,4 @@
-﻿Public Class clsSortingSearch
+Public Class clsSortingSearch
     '並べ替えと検索のクラス
     Dim SortNumber() As Integer
     Dim Sortrr_lng() As Integer
@@ -32,6 +32,7 @@
                     Dim sv() As String
                     Return Get_Same_value(sv)
             End Select
+            Return 0
         End Get
     End Property
     Public ReadOnly Property EachValue_Number() As Integer
@@ -51,6 +52,7 @@
                     Dim sv() As String
                     Return Get_Each_value(sv)
             End Select
+            Return 0
         End Get
     End Property
     ''' <summary>

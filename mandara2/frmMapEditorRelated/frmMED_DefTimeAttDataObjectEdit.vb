@@ -1,4 +1,4 @@
-﻿Public Class frmMED_DefTimeAttDataObjectEdit
+Public Class frmMED_DefTimeAttDataObjectEdit
     Dim defPData() As clsMapData.strDefTimeAttDataEach_Info
     Dim data_n As Integer
     Dim TimeAttDataType As clsMapData.enmDefTimeAttDataType
@@ -208,7 +208,7 @@
                     Return "【" + clsTime.StartEndtoString(.Span) + "】" + .Value
             End Select
         End With
-
+        Return String.Empty
     End Function
     Private Function getInitdefPData() As clsMapData.strDefTimeAttDataEach_Info
         Dim defPData As clsMapData.strDefTimeAttDataEach_Info
