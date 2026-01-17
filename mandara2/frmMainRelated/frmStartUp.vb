@@ -1,4 +1,4 @@
-﻿
+
 Public Class frmStartUp
     Public Enum enmRetCommand
         Clipboard = 0
@@ -65,6 +65,7 @@ Public Class frmStartUp
                 Case rbMapEditor.Checked
                     Return enmRetCommand.MapEditor
             End Select
+            Return enmRetCommand.NewData
         End If
     End Function
 

@@ -212,8 +212,10 @@ Public Class frmPrint_SeriesFileOut
             sw.Close()
             MsgBox(FolderSelect.Folder + "に出力しました。")
             System.Diagnostics.Process.Start(FolderSelect.Folder)
+            Return True
         Catch ex As Exception
             MsgBox(fna & "が作成できませんでした。", MsgBoxStyle.Exclamation)
+            Return False
         End Try
 
 
@@ -302,8 +304,10 @@ Public Class frmPrint_SeriesFileOut
             sw.Close()
             MsgBox(FolderSelect.Folder + "に出力しました。")
             System.Diagnostics.Process.Start(FolderSelect.Folder)
+            Return True
         Catch ex As Exception
             MsgBox(fna & "が作成できませんでした。", MsgBoxStyle.Exclamation)
+            Return False
         End Try
     End Function
 

@@ -1,4 +1,4 @@
-﻿'
+'
 ' GIS Software MANDARA
 ' Source Code File name  frmMain.vb
 '
@@ -1463,6 +1463,7 @@ Public Class clsOldMDRFile
 
         End With
         FileClose(n)
+        Return True
     End Function
     Private Shared Function getMapLegend(ByVal n As Integer) As Legend_Attri_v1275
         Dim lg As Legend_Attri_v1275

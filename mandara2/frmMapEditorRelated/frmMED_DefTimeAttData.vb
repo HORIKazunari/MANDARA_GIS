@@ -1,4 +1,4 @@
-﻿Public Class frmMED_DefTimeAttData
+Public Class frmMED_DefTimeAttData
     Public Structure MpObjTimeDef_info
         Public DefTimeAttValue() As clsMapData.strDefTimeAttData_Info
     End Structure
@@ -801,6 +801,7 @@
             UndoStac.RemoveAt(0)
         End If
         SetUndoMenu()
+        Return True
     End Function
     Private Sub SetUndoMenu()
         Dim n As Integer = UndoStac.Count

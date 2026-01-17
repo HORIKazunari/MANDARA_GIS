@@ -1,4 +1,4 @@
-﻿'
+'
 ' GIS Software MANDARA
 ' Source Code File name  frmGird.vb
 '
@@ -251,6 +251,7 @@ Public Class frmGrid
                     '文字列の長さの平均値
                     Return n / .atrObject.ObjectNum
             End Select
+            Return 0
         End With
     End Function
     ''' データエラーのチェック
@@ -1000,6 +1001,7 @@ Public Class frmGrid
                 Return True
             End If
         End If
+        Return False
     End Function
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click

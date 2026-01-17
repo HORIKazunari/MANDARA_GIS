@@ -396,6 +396,7 @@ Public Class clsAccessory
                 End With
             Next
         End If
+        Return True
     End Function
     ''' <summary>
     ''' 点オブジェクトの凡例
@@ -448,8 +449,7 @@ Public Class clsAccessory
             attrData.Draw_Print(g, pok.ObjectKindName, New Point(ALP.X + mxw1, ALP.Y + Ys + s / 2), LFont, enmHorizontalAlignment.Left, enmVerticalAlignment.Center)
             Ys += s
         Next
-
-
+        Return True
     End Function
     ''' <summary>
     ''' 折れ線・棒グラフモード
@@ -620,8 +620,7 @@ Public Class clsAccessory
             End If
         Next
         HeadBoxSize.Height = ysize2
-
-
+        Return True
     End Function
     ''' <summary>
     ''' 円グラフで、凡例の表示方法が円一つの場合で円グラフの周囲にデータ項目名を並べる場合の凡例
@@ -916,7 +915,7 @@ Public Class clsAccessory
                 HeadBoxSize = size2
             End If
         Next
-
+        Return True
     End Function
     Public Shared Function getLegendMinusWord(ByVal s As String) As String
         If s = "" Then
