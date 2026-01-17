@@ -1,4 +1,4 @@
-﻿Public Class frmMain_MarkViewSettings
+Public Class frmMain_MarkViewSettings
     Dim attData As clsAttrData
     Dim MarkMode As enmSoloMode_Number
     Dim LayerNum As Integer
@@ -212,7 +212,7 @@
 
     Private Sub picMark_Click(sender As Object, e As EventArgs) Handles picMark.Click
         With attData.LayerData(LayerNum).atrData.Data(DataNum).SoloModeViewSettings
-            Dim mk As Mark_Property
+            Dim mk As Mark_Property = Nothing
             Select Case MarkMode
                 Case enmSoloMode_Number.MarkSizeMode
                     mk = .MarkSizeMD.Mark
@@ -507,7 +507,7 @@
         clsGeneric.HelpShow(enmHelpFile.SettingWindow, tx)
     End Sub
 
- 
+
 
     Private Sub rbBarShapeBar_CheckedChanged(sender As Object, e As EventArgs) Handles rbBarShapeBar.CheckedChanged, rbBarShapeTriangle.CheckedChanged
         With attData.LayerData(LayerNum).atrData.Data(DataNum).SoloModeViewSettings.MarkBarMD

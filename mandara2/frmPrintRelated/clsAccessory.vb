@@ -1,4 +1,4 @@
-﻿Public Class clsAccessory
+Public Class clsAccessory
     ''' <summary>PrintTMS
     ''' </summary>
     ''' <param name="g"></param>
@@ -1363,7 +1363,7 @@
                                         ByVal tp As Tile_Property, ByRef Ys As Integer, ByRef xs As Integer,
                                         ByVal Print_Flag As Boolean)
 
-        Dim MP As Mark_Property
+        Dim MP As Mark_Property = Nothing
 
         MP.ShapeNumber = 0
         MP.Tile = tp
@@ -2607,7 +2607,7 @@
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetScaleRect(ByRef g As Graphics, ByRef attrData As clsAttrData) As Rectangle
-        Dim P_Scl As clsAttrData.strScale_Attri
+        Dim P_Scl As clsAttrData.strScale_Attri = Nothing
         Dim SCST As Integer
         Dim scaleMax As String
         Dim sxy As Point
@@ -2785,7 +2785,7 @@
     ''' <remarks></remarks>
     Public Shared Sub Scale_Print(ByRef g As Graphics, ByRef attrData As clsAttrData)
 
-        Dim P_Scl As clsAttrData.strScale_Attri
+        Dim P_Scl As clsAttrData.strScale_Attri = Nothing
         Dim SCST As Integer
         Dim scaleMax As String
         Dim sxy As Point

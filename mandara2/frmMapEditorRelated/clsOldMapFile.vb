@@ -1,4 +1,4 @@
-﻿Public Class clsOldMapFile
+Public Class clsOldMapFile
 
     Private Structure Obj_Data_10 'オブジェクト（地図データ）
         Public Kind As Integer
@@ -266,7 +266,7 @@
         Dim Mapv11 As New map_data_v11
         Select Case MPVersion
             Case 9
-                Dim Map_9 As map_data_9
+                Dim Map_9 As map_data_9 = Nothing
                 FileGet(n, Map_9)
                 With Mapv11
                     .ALIN = Map_9.ALIN
@@ -289,7 +289,7 @@
                     .Zahyo.Projection = enmProjection_Info.prjNo
                 End With
             Case 10
-                Dim Map_10 As map_data_10
+                Dim Map_10 As map_data_10 = Nothing
                 FileGet(n, Map_10)
                 With Mapv11
                     .ALIN = Map_10.ALIN
@@ -370,7 +370,7 @@
         Select Case MPVersion
             Case 9
                 For i As Integer = 0 To Mapv11.OBKNum - 1
-                    Dim Objectkind_9 As ObjectKind_Data_9
+                    Dim Objectkind_9 As ObjectKind_Data_9 = Nothing
                     FileGet(n, Objectkind_9)
                     With ObjectKindv11(i)
                         .Name = Objectkind_9.Name
@@ -383,7 +383,7 @@
                 Next
             Case 10
                 For i As Integer = 0 To Mapv11.OBKNum - 1
-                    Dim Objectkind_10 As ObjectKind_Data_10
+                    Dim Objectkind_10 As ObjectKind_Data_10 = Nothing
                     FileGet(n, Objectkind_10)
                     With ObjectKindv11(i)
                         .Name = Objectkind_10.Name

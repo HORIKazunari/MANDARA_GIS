@@ -1,4 +1,4 @@
-﻿Public Enum mousePointingSituations
+Public Enum mousePointingSituations
     down
     move
     up
@@ -1594,7 +1594,7 @@ Public Class frmMapEditor
         Dim integrate_F As Boolean
         If MapEditorOpe.GetShapefile(shapefiles, topology_f, integrate_F) = True Then
             Dim n As Integer = shapefiles.Length
-            Dim Omap As clsMapData.strMap_data
+            Dim Omap As clsMapData.strMap_data = Nothing
             If newF = False Then
                 Omap = MapData.Map
             End If
@@ -1705,7 +1705,7 @@ Public Class frmMapEditor
 
     Private Sub mnuGetContour_Click(sender As Object, e As EventArgs) Handles mnuGetContour.Click
         Dim newF As Boolean = MapData.NoDataFlag
-        Dim Omap As clsMapData.strMap_data
+        Dim Omap As clsMapData.strMap_data = Nothing
         If newF = False Then
             Omap = MapData.Map
         End If
@@ -1733,7 +1733,7 @@ Public Class frmMapEditor
 
     Private Sub mnuKMLFile_Click(sender As Object, e As EventArgs) Handles mnuKMLFile.Click
         Dim newF As Boolean = MapData.NoDataFlag
-        Dim Omap As clsMapData.strMap_data
+        Dim Omap As clsMapData.strMap_data = Nothing
         If newF = False Then
             Omap = MapData.Map
         End If
@@ -1789,7 +1789,7 @@ Public Class frmMapEditor
 
         If MapEditorOpe.GetE00file(E00files) = True Then
             Dim n As Integer = E00files.Length
-            Dim Omap As clsMapData.strMap_data
+            Dim Omap As clsMapData.strMap_data = Nothing
             If newF = False Then
                 Omap = MapData.Map
             End If
@@ -1849,7 +1849,7 @@ Public Class frmMapEditor
 
     Private Sub mnuCensusSmallArea_Click(sender As Object, e As EventArgs) Handles mnuCensusSmallArea.Click
         Dim newF As Boolean = MapData.NoDataFlag
-        Dim Omap As clsMapData.strMap_data
+        Dim Omap As clsMapData.strMap_data = Nothing
         If newF = False Then
             Omap = MapData.Map
         End If
@@ -2131,7 +2131,7 @@ Public Class frmMapEditor
 
     Private Sub mnuKiban_Click(sender As Object, e As EventArgs) Handles mnuKiban.Click
         Dim newF As Boolean = MapData.NoDataFlag
-        Dim Omap As clsMapData.strMap_data
+        Dim Omap As clsMapData.strMap_data = Nothing
         If newF = False Then
             Omap = MapData.Map
         End If
@@ -2162,7 +2162,7 @@ Public Class frmMapEditor
 
     Private Sub mnuOpenStreetMap_Click(sender As Object, e As EventArgs) Handles mnuOpenStreetMap.Click
         Dim newF As Boolean = MapData.NoDataFlag
-        Dim Omap As clsMapData.strMap_data
+        Dim Omap As clsMapData.strMap_data = Nothing
         If newF = False Then
             Omap = MapData.Map
         End If

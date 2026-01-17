@@ -1,4 +1,4 @@
-﻿Public Class frmMED_ShapefileOut
+Public Class frmMED_ShapefileOut
     Dim CloseCancelF As Boolean
     Dim MapData As clsMapData
     Public Overloads Function ShowDialog(ByVal Owner As IWin32Window, ByRef mpData As clsMapData, ByVal Time As strYMD) As Windows.Forms.DialogResult
@@ -20,10 +20,6 @@
         End If
         Return Me.ShowDialog(Owner)
     End Function
-    Public Sub getResult()
-
-    End Sub
-
     Private Sub frmMED_ShapefileOut_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Select Case e.CloseReason
             Case CloseReason.None

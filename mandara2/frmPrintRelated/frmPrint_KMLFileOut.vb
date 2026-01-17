@@ -1,4 +1,4 @@
-﻿Public Class frmPrint_KMLFileOut
+Public Class frmPrint_KMLFileOut
     Dim CloseCancelF As Boolean
 
     Dim attr As clsAttrData
@@ -72,10 +72,6 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
-
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles rbSeaLevel.CheckedChanged
 
     End Sub
@@ -590,7 +586,7 @@
                                                 TB.Append(Get_Cooodinate_Str(L2, poxy, A_Mode, Alti, True))
                                                 TB.Append("</LinearRing>" & CR)
                                             End If
-                                Next
+                                        Next
                                         If inF_F = True Then
                                             TB.Append("</innerBoundaryIs>" & CR)
                                         End If

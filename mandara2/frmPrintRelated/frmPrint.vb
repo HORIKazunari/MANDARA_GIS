@@ -1,4 +1,4 @@
-﻿Public Class frmPrint
+Public Class frmPrint
     Private Enum enmPrintMouseMode
         Normal = 0
         PlusMinus = 1
@@ -1756,7 +1756,7 @@
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub mnuAccPopupVisible_ContourValueShow()
-        Dim FWord As clsAttrData.strFig_Word_Data
+        Dim FWord As clsAttrData.strFig_Word_Data = Nothing
         Dim c As Integer = Me.temp_data.LocationMenuString.ContourStacPos
         Dim cdata As clsAttrData.strContour_Line_property = attrData.TempData.ContourMode_Temp.Contour_Object(c)
         With FWord
@@ -1774,7 +1774,7 @@
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub mnuAccPopupVisible_ObjectValueShow()
-        Dim FWord As clsAttrData.strFig_Word_Data
+        Dim FWord As clsAttrData.strFig_Word_Data = Nothing
         With FWord
             Dim lay As Integer = temp_data.OnObject.Item(0).objLayer
             ReDim .StringPos(0)
@@ -1914,7 +1914,7 @@
             Dim Dis As Single = spatial.get_Distance(.CircleModeInfo.OriginCenterP, MPos)
             If Dis > 0 Then
                 Dim xy2 As PointF = MPos
-                spatial.PointF_offset(xy2, -.CircleModeInfo.OriginCenterP.X, -.CircleModeInfo.OriginCenterP.Y)
+                spatial.PointF_offset(xy2, - .CircleModeInfo.OriginCenterP.X, - .CircleModeInfo.OriginCenterP.Y)
                 Dim si As Single = -xy2.Y / Dis
                 Dim co As Single = xy2.X / Dis
                 Dim MapScaleBairitu As Single
@@ -3897,8 +3897,8 @@
         Dim Mode As enmSoloMode_Number = attrData.LayerData(Layernum).atrData.Data(Datanum).ModeData
         Dim Shape As enmShape = attrData.LayerData(Layernum).Shape
 
-        If attrData.TotalData.LV1.Print_Mode_Total = enmTotalMode_Number.DataViewMode And attrData.TotalData.ViewStyle.Zahyo.Mode <> enmZahyo_mode_info.Zahyo_No_Mode And _
-                attrData.LayerData(Layernum).Print_Mode_Layer = enmLayerMode_Number.SoloMode And _
+        If attrData.TotalData.LV1.Print_Mode_Total = enmTotalMode_Number.DataViewMode And attrData.TotalData.ViewStyle.Zahyo.Mode <> enmZahyo_mode_info.Zahyo_No_Mode And
+                attrData.LayerData(Layernum).Print_Mode_Layer = enmLayerMode_Number.SoloMode And
                 (Mode = enmSoloMode_Number.ClassPaintMode Or (Mode = enmSoloMode_Number.MarkSizeMode And Shape <> enmShape.LineShape)) Then
             Dim form As New frmPrint_KMLFileOut
             form.ShowDialog(attrData)

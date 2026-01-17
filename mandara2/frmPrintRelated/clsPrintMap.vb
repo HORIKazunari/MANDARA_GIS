@@ -1,4 +1,4 @@
-﻿Public Class clsPrintMap
+Public Class clsPrintMap
     Private Structure VecContourStac_Info
         Public fnum As Integer
         Public CNum As Integer
@@ -415,12 +415,6 @@
             End If
         End With
     End Sub
-    ''' <summary>
-    ''' ダミーオブジェクトをクリップ領域に設定ているレイヤ一覧取得
-    ''' </summary>
-    ''' <param name="attrData"></param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
     Private Shared Function Get_DummyClipLayers(ByRef attrData As clsAttrData) As List(Of Integer)
         Dim dummyClipLayer As New List(Of Integer)
         With attrData.TotalData.TotalMode.OverLay
@@ -441,10 +435,6 @@
 
         Return dummyClipLayer
     End Function
-    ''' <summary>
-    ''''常時重ね合わせが設定してある場合 
-    ''' </summary>
-    ''' <remarks></remarks>
     Private Shared Sub OverLay_Plus_Print(ByRef g As Graphics, ByRef prog As ToolStripProgressBar, ByRef attrData As clsAttrData)
 
         Dim n As Integer = attrData.TotalData.TotalMode.OverLay.Always_Overlay_Index
@@ -511,13 +501,6 @@
         Next
         attrData.TempData.OverLay_Temp.OverLay_Printing_Flag = False
     End Sub
-    ''' <summary>
-    ''' 重ね合わせモードのデータセット内の表示項目ごとの凡例セット
-    ''' </summary>
-    ''' <param name="attrData"></param>
-    ''' <param name="Over_D"></param>
-    ''' <param name="n"></param>
-    ''' <remarks></remarks>
     Private Shared Sub Legend_Data_Set_Over_sub(ByRef attrData As clsAttrData, ByRef Over_D As clsAttrData.strOverLay_DataSet_Item_Info,
                                                 ByRef n As Integer)
 
@@ -2314,7 +2297,7 @@
                                         If attrData.Check_Missing_Value(Layernum, Datan, SortObjPos) = False Then
                                             Dim H As Double = Val(attrData.Get_Data_Value(Layernum, Datan, SortObjPos, "")) / SortSumDataValue
                                             If Math.Abs(H - 1) <= 0.00001 Then
-                                                Dim Circle_Mark As Mark_Property
+                                                Dim Circle_Mark As Mark_Property = Nothing
                                                 Circle_Mark.PrintMark = enmMarkPrintType.Mark
                                                 Circle_Mark.WordFont.Back.Tile = clsBase.BlancTile
                                                 Circle_Mark.WordFont.Back.Line = clsBase.BlancLine
@@ -5099,7 +5082,7 @@
 
         Dim pointR As Integer
         With attrData.LayerData(LayerNum)
-            Dim PointLayerMark As Mark_Property
+            Dim PointLayerMark As Mark_Property = Nothing
 
             If LayerShape = enmShape.PointShape Then
                 Vector_Connect_CenterP_To_SymbolPoint(g, attrData, LayerNum)

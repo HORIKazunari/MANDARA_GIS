@@ -1,4 +1,4 @@
-﻿Public Class clsMapEditorOperation
+Public Class clsMapEditorOperation
  
     Private Structure strLineDivideData_info
         Public OriginalLineCode As Integer
@@ -1096,7 +1096,7 @@
         If _MapEditor.EditList.Object_and_Line_DragEnabled = True And n <> -1 And minD < minDLineDrag Then
             ObjLineDragModeF = True
             If CenterDrag_F = True Then
-                _MapEditor.EditingMode_ObjectSub = _MapEditor.EditingModes_ObjectSub.Object_and_Line_DragMode
+                _MapEditor.EditingMode_ObjectSub = frmMapEditor.EditingModes_ObjectSub.Object_and_Line_DragMode
             End If
             f = True
         Else
@@ -1105,7 +1105,7 @@
                     f = False
                 Case Else
                     If CenterDrag_F = True Then
-                        _MapEditor.EditingMode_ObjectSub = _MapEditor.EditingModes_ObjectSub.ObjectCoreDragMode
+                        _MapEditor.EditingMode_ObjectSub = frmMapEditor.EditingModes_ObjectSub.ObjectCoreDragMode
                         EditedObjectDragCoreNumer = n
                     Else
                         CenterPPosition = n
@@ -1145,14 +1145,13 @@
     ''' <param name="ObjCode">オブジェクト番号List（入力値および戻り値）</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Overloads Function removeDifferentObjectType(ByRef ObjCode As List(Of Integer))
-
+    Private Overloads Sub removeDifferentObjectType(ByRef ObjCode As List(Of Integer))
         For i As Integer = ObjCode.Count - 1 To 0 Step -1
             If MapData.ObjectKind(MapData.MPObj(ObjCode.Item(i)).Kind).ObjectType <> _MapEditor.EditList.ObjectType Then
                 ObjCode.RemoveAt(i)
             End If
         Next
-    End Function
+    End Sub
     ''' <summary>
     ''' ライン検索モードで左クリックし、オブジェクトを選択
     ''' </summary>
@@ -6275,7 +6274,8 @@
     ''' <param name="Obj"></param>
     ''' <remarks></remarks>
     Private Sub Set_ClickObjectNameSelObj(ByVal Obj As clsMapData.strObj_Data)
-        Dim seln As Integer = My.Forms.frmMED_ClickSetObjName.lbObjName.SelectedIndex
+        Dim clickSetForm As frmMED_ClickSetObjName = My.Forms.frmMED_ClickSetObjName
+        Dim seln As Integer = clickSetForm.lbObjName.SelectedIndex
         If seln = -1 Then
             MsgBox("オブジェクト名のリストを選択してください。", MsgBoxStyle.Exclamation)
             picMap.Refresh()
@@ -6283,7 +6283,9 @@
         End If
         EditingObject = Obj.Clone()
         EditMapping(False)
-        Dim cname As String() = My.Forms.frmMED_ClickSetObjName.newObjName(seln)
+
+        ' ✅ クラス名経由でアクセス
+        Dim cname As String() = frmMED_ClickSetObjName.newObjName(seln)
         If MapData.ObjectKind(EditingObject.Kind).ObjectNameNum <> cname.Length Then
             MsgBox("オブジェクト名リスト数が異なります。", MsgBoxStyle.Exclamation)
             EditingObject.Number = -1
@@ -6294,7 +6296,7 @@
         Dim stacP As Integer
         MapData.Get_Enable_ObjectName(EditingObject, _MapEditor.EditList.EditTime, True, NameStr, stacP)
         Dim f As Boolean = True
-        If My.Forms.frmMED_ClickSetObjName.cbConfirm.Checked = True Then
+        If clickSetForm.cbConfirm.Checked = True Then
             If MsgBox(NameStr & vbCrLf & " > " & Join(cname, "/"), vbYesNo) = MsgBoxResult.No Then
                 f = False
                 EditingObject.Number = -1
@@ -6303,21 +6305,20 @@
         End If
         If f = True Then
             EditingObject.NameTimeSTC(stacP).NamesList = cname.Clone
-            With My.Forms.frmMED_ClickSetObjName
-                If .ChangeObjNameFlag = False Then
-                    Dim UndoObj As List(Of clsMapData.Object_NameTimeStac_Data()) = MapData.Get_All_ObjectName()
-                    MapEditorUndo.SetUndo_ReplaceObjectName("オブジェクト名のクリック割り当て", UndoObj)
-                    .ChangeObjNameFlag = True
-                End If
-                MapData.Save_Object(EditingObject, True)
-                Dim maxn As Integer = .lbObjName.Items.Count
-                If seln = maxn - 1 Then
-                    seln = 0
-                Else
-                    seln += 1
-                End If
-                .lbObjName.SelectedIndex = seln
-            End With
+            ' ✅ Withブロックを使わず、クラス名経由でアクセス
+            If frmMED_ClickSetObjName.ChangeObjNameFlag = False Then
+                Dim UndoObj As List(Of clsMapData.Object_NameTimeStac_Data()) = MapData.Get_All_ObjectName()
+                MapEditorUndo.SetUndo_ReplaceObjectName("オブジェクト名のクリック割り当て", UndoObj)
+                frmMED_ClickSetObjName.ChangeObjNameFlag = True
+            End If
+            MapData.Save_Object(EditingObject, True)
+            Dim maxn As Integer = clickSetForm.lbObjName.Items.Count
+            If seln = maxn - 1 Then
+                seln = 0
+            Else
+                seln += 1
+            End If
+            clickSetForm.lbObjName.SelectedIndex = seln
         End If
         EditingObject.Number = -1
         EditMapping(False)
