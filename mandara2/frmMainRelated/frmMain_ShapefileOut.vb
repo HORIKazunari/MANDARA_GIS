@@ -1,4 +1,4 @@
-﻿Public Class frmMain_ShapefileOut
+Public Class frmMain_ShapefileOut
     Dim CloseCancelF As Boolean
     Dim Attr As clsAttrData
     Private Sub frmFormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -20,10 +20,6 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
-
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
         If clsGeneric.Check_Folder_Exists(fileSelect.Path) = False Then
             CloseCancelF = True

@@ -1310,13 +1310,13 @@ Public Class frmMED_MeshContour
             Case Windows.Forms.MouseButtons.Left
                 '左クリックの場合－－－－－－－－－－－－－－－－
                 Select Case mousePointingSituation
-                    Case mousePointingSituation.downAndMove
+                    Case mousePointingSituations.downAndMove
                         picMapImageOperation.DisposeBackCanvasPictureImage()
                         Dim StartP As PointF = ScrData.getSRXY(mouseDownPosition)
                         Dim EndP As PointF = ScrData.getSRXY(mouseUpPosition)
                         ScrData.ScrView.Offset(StartP.X - EndP.X, StartP.Y - EndP.Y)
                         printMap()
-                    Case mousePointingSituation.down
+                    Case mousePointingSituations.down
                         '左クリックの場合、範囲指定
                         Select Case mouseRangeMode
                             Case enmMouseRangeMode.noPointSet, enmMouseRangeMode.EndPointSet
@@ -1333,10 +1333,10 @@ Public Class frmMED_MeshContour
             Case Windows.Forms.MouseButtons.Right
                 '右クリックは元に戻す
                 Select Case mousePointingSituation
-                    Case mousePointingSituation.downAndMove
+                    Case mousePointingSituations.downAndMove
                         picMapImageOperation.DisposeBackCanvasPictureImage()
                         printMap()
-                    Case mousePointingSituation.up
+                    Case mousePointingSituations.up
                         Select Case mouseRangeMode
                             Case enmMouseRangeMode.startPointSet, enmMouseRangeMode.EndPointSet
                                 mouseRangeMode = enmMouseRangeMode.noPointSet
@@ -1344,7 +1344,7 @@ Public Class frmMED_MeshContour
                         printMap()
                 End Select
         End Select
-        mousePointingSituation = mousePointingSituation.up
+        mousePointingSituation = mousePointingSituations.up
     End Sub
 
     Private Sub picMap_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picMap.MouseWheel

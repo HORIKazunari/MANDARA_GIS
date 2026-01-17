@@ -1,4 +1,4 @@
-﻿Public Class clsMapData
+Public Class clsMapData
     ''' <summary>
     ''' Get_Hennyu_Objectで使用する構造体
     ''' </summary>
@@ -497,7 +497,7 @@
                 Dim f As Boolean = clsGeneric.CompressFolder_and_DeleteTempFolder(tmpFolderName, MapFileName)
                 Return f
         End Select
-
+        Return False
     End Function
     ''' <summary>
     ''' xml地図ファイルから読み込み
@@ -3610,7 +3610,7 @@
     ''' <param name="exclusion_code">除外ラインコード</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function Check_Line_Connect(ByRef Line As clsMapData.strLine_Data, _
+    Public Function Check_Line_Connect(ByRef Line As clsMapData.strLine_Data,
                                              Optional ByVal exclusion_code As Integer = -1) As enmLineConnect
         'exclude_codeで、比較対象からはずすラインを指定できる
 
@@ -3625,7 +3625,7 @@
             Case 4
                 Return enmLineConnect.loopen
         End Select
-
+        Return enmLineConnect.no
     End Function
     ''' <summary>
     ''' 指定したラインの他ラインとの接続状況の詳細を返す
@@ -3817,7 +3817,7 @@
             Value = ""
             If Me.Map.Time_Mode = False Then
                 '時間データでない場合
-                    Value = .DefTimeAttValue(defNumber).Data(0).Value
+                Value = .DefTimeAttValue(defNumber).Data(0).Value
                 Return True
             Else
                 '時間データの場合
@@ -3914,6 +3914,7 @@
                 End With
             End If
         End With
+        Return False
     End Function
     ''' <summary>
     ''' 指定したオブジェクトに、編入されたオブジェクトの取得し、その数を返す

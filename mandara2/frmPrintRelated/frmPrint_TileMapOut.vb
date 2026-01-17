@@ -129,7 +129,7 @@ Public Class frmPrint_TileMapOut
         End If
         CloseCancelF = True
     End Sub
-    Private Function TileMapOut(ByVal Folder As String, ByVal MaxZoom As Long, ByVal MinZoom As Long, _
+    Private Function TileMapOut(ByVal Folder As String, ByVal MaxZoom As Long, ByVal MinZoom As Long,
                             ByVal latlonBox As strLatLonBox, ByVal ext As String) As Boolean
         'タイルマップ形式で出力
 
@@ -337,7 +337,7 @@ Public Class frmPrint_TileMapOut
         Call ResetScreen(MapScaleV, MapTitleV, MapLegendBaseV, AttMapCompassV, ScrData, noteV, AccessoryGroupBoxV)
         Return True
     End Function
-    Private Sub ResetScreen(ByVal MapScaleV As Boolean, ByVal MapTitleV As Boolean, ByVal MapLegendBaseV As Boolean, _
+    Private Sub ResetScreen(ByVal MapScaleV As Boolean, ByVal MapTitleV As Boolean, ByVal MapLegendBaseV As Boolean,
             ByVal AttMapCompassV As Boolean, ByRef oldScrData As Screen_info, noteV As Boolean, AccessoryGroupBoxV As Boolean)
         With attr.TotalData.ViewStyle
             .MapScale.Visible = MapScaleV
@@ -350,16 +350,15 @@ Public Class frmPrint_TileMapOut
         End With
         lblProg.Visible = False
     End Sub
-    Private Function OutputSampleHTML(ByVal Folder As String, ByVal MaxZoom As Integer, ByVal MinZoom As Integer, _
+    Private Function OutputSampleHTML(ByVal Folder As String, ByVal MaxZoom As Integer, ByVal MinZoom As Integer,
                             ByVal latlonBox As strLatLonBox, ByVal ext As String) As Boolean
-        ' 未使用定数を削除
         Dim objStream_html As Object
 
         Dim T As New System.Text.StringBuilder()
 
         Dim cido As Single = (latlonBox.NorthWest.Latitude + latlonBox.SouthEast.Latitude) / 2
         Dim ckedo As Single = (latlonBox.NorthWest.Longitude + latlonBox.SouthEast.Longitude) / 2
-        Dim czoom As Integer= (MaxZoom + MinZoom) \ 2
+        Dim czoom As Integer = (MaxZoom + MinZoom) \ 2
 
         T.Append("<!DOCTYPE html>" & vbCrLf)
         T.Append("<html>" & vbCrLf & "  <head>" & vbCrLf)
@@ -435,8 +434,7 @@ Public Class frmPrint_TileMapOut
         Dim sw2 As New System.IO.StreamWriter(leafletfile_Path, False, System.Text.Encoding.GetEncoding("utf-8"))
         sw2.Write(T.ToString)
         sw2.Close()
-
-
+        Return True
     End Function
     Private Sub Help_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.HelpButtonClicked
         e.Cancel = True

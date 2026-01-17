@@ -1,4 +1,4 @@
-﻿Public Class frmMain_TimeSeriesSummingUp
+Public Class frmMain_TimeSeriesSummingUp
     Private Structure newDataInfo
         Public oldLay As Integer
         Public oldDataNum As Integer
@@ -84,10 +84,6 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
-
     Private Sub clbLayer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles clbLayer.SelectedIndexChanged
         Dim L As Integer = clbLayer.SelectedIndex
         lblData.Text = "【" + attr.LayerData(L).Name + "】" + "取得するデータ項目"
@@ -242,7 +238,7 @@
         Return k
     End Function
 
-    Private Function Get_Related_Time_Object(ByVal Base_Object As Integer, ByVal Start_Time As strYMD, _
+    Private Function Get_Related_Time_Object(ByVal Base_Object As Integer, ByVal Start_Time As strYMD,
             ByVal End_Time As strYMD, ByRef RelatedObject() As Integer) As Integer
 
         Dim f As Boolean

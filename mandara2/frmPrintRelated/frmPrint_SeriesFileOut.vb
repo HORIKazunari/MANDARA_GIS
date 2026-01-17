@@ -1,4 +1,4 @@
-﻿Imports System.Drawing
+Imports System.Drawing
 Imports System.IO
 Public Class frmPrint_SeriesFileOut
     Dim CloseCancelF As Boolean
@@ -32,10 +32,6 @@ Public Class frmPrint_SeriesFileOut
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
-
-    End Function
-
 
     Private Sub rbImage_CheckedChanged(sender As Object, e As EventArgs) Handles rbImage.CheckedChanged, rbWebImageAnime.CheckedChanged,
         rbWebImageChange.CheckedChanged, rbAnimatedGIF.CheckedChanged
@@ -153,7 +149,7 @@ Public Class frmPrint_SeriesFileOut
         End Select
     End Sub
     Private Function Out_WebAnimation() As Boolean
-   
+
 
         Dim picSize As Size = attr.TotalData.ViewStyle.ScrData.frmPrint_FormSize.Size
 
@@ -216,8 +212,10 @@ Public Class frmPrint_SeriesFileOut
             sw.Close()
             MsgBox(FolderSelect.Folder + "に出力しました。")
             System.Diagnostics.Process.Start(FolderSelect.Folder)
+            Return True
         Catch ex As Exception
             MsgBox(fna & "が作成できませんでした。", MsgBoxStyle.Exclamation)
+            Return False
         End Try
 
 
@@ -306,8 +304,10 @@ Public Class frmPrint_SeriesFileOut
             sw.Close()
             MsgBox(FolderSelect.Folder + "に出力しました。")
             System.Diagnostics.Process.Start(FolderSelect.Folder)
+            Return True
         Catch ex As Exception
             MsgBox(fna & "が作成できませんでした。", MsgBoxStyle.Exclamation)
+            Return False
         End Try
     End Function
 
@@ -341,12 +341,12 @@ Public Class frmPrint_SeriesFileOut
     ''' <param name="baseImages">GIFアニメにする画像。</param>
     ''' <param name="delayTime">遅延時間（100分の1秒単位）。</param>
     ''' <param name="loopCount">繰り返す回数。0で無限。</param>
-    Public Shared Sub SaveAnimatedGif(ByVal fileName As String, _
-                                      ByVal baseImages As Bitmap(), _
+    Public Shared Sub SaveAnimatedGif(ByVal fileName As String,
+                                      ByVal baseImages As Bitmap(),
                                       ByVal firstComaDelayTime As UInt16, ByVal MidiComaDelayTime As UInt16, ByVal LastComaDelayTime As UInt16,
                                       ByVal loopCount As UInt16)
         '書き込み先のファイルを開く
-        Dim writerFs As New FileStream(fileName, _
+        Dim writerFs As New FileStream(fileName,
             FileMode.Create, FileAccess.Write, FileShare.None)
         'BinaryWriterで書き込む
         Dim writer As New BinaryWriter(writerFs)
@@ -454,7 +454,7 @@ Public Class frmPrint_SeriesFileOut
     ''' <param name="ms">読み取るMemoryStream</param>
     ''' <param name="count">読み取るバイトのサイズ</param>
     ''' <returns>読み取れたバイト配列</returns>
-    Private Shared Function ReadBytes(ByVal ms As MemoryStream, _
+    Private Shared Function ReadBytes(ByVal ms As MemoryStream,
                                       ByVal count As Integer) As Byte()
         Dim bs As Byte() = New Byte(count - 1) {}
         ms.Read(bs, 0, count)

@@ -1,4 +1,4 @@
-﻿Public Class clsVB6File
+Public Class clsVB6File
     ''' <summary>
     ''' 単精度のxy座標
     ''' </summary>
@@ -210,7 +210,7 @@
     ''' <remarks></remarks>
     Public Shared Function getFontPropertyV11(ByVal n As Integer) As Font_Property_v11
         '
-        Dim ft As Font_Property_v11
+        Dim ft As Font_Property_v11 = Nothing
         FileGet(n, ft.Body)
         ft.Tile = getTilePropertyV11(n)
         ft.frameLine = getLinePropertyV11(n)
@@ -315,7 +315,7 @@
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function getTilePropertyV11(ByVal n As Integer) As Tile_Property_v11
-        Dim tl As Tile_Property_v11
+        Dim tl As Tile_Property_v11 = Nothing
         FileGet(n, tl.TileCode)
         tl.Line = getLinePropertyV11(n)
         FileGet(n, tl.Density)
@@ -1522,7 +1522,7 @@
                                     .FrameLinePat = clsBase.Line
                                     .ScaleLineInterval = old.SoloMode.BlockMD.Value
                                     .MaxHeight = 10
-                                    .MaxValueMode = clsAttrData.enmMarkSizeValueMode.inDataItem.inDataItem
+                                    .MaxValueMode = clsAttrData.enmMarkSizeValueMode.inDataItem
                                     .MaxValue = old.DTA.Max
                                     .scaleLinePat = clsBase.Line
                                     .scaleLinePat.BasicLine.SolidLine.Color = clsBase.ColorWhite

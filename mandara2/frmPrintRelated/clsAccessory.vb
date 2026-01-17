@@ -1,4 +1,4 @@
-﻿Public Class clsAccessory
+Public Class clsAccessory
     ''' <summary>PrintTMS
     ''' </summary>
     ''' <param name="g"></param>
@@ -396,6 +396,7 @@
                 End With
             Next
         End If
+        Return True
     End Function
     ''' <summary>
     ''' 点オブジェクトの凡例
@@ -448,8 +449,7 @@
             attrData.Draw_Print(g, pok.ObjectKindName, New Point(ALP.X + mxw1, ALP.Y + Ys + s / 2), LFont, enmHorizontalAlignment.Left, enmVerticalAlignment.Center)
             Ys += s
         Next
-
-
+        Return True
     End Function
     ''' <summary>
     ''' 折れ線・棒グラフモード
@@ -620,8 +620,7 @@
             End If
         Next
         HeadBoxSize.Height = ysize2
-
-
+        Return True
     End Function
     ''' <summary>
     ''' 円グラフで、凡例の表示方法が円一つの場合で円グラフの周囲にデータ項目名を並べる場合の凡例
@@ -916,7 +915,7 @@
                 HeadBoxSize = size2
             End If
         Next
-
+        Return True
     End Function
     Public Shared Function getLegendMinusWord(ByVal s As String) As String
         If s = "" Then
@@ -1363,7 +1362,7 @@
                                         ByVal tp As Tile_Property, ByRef Ys As Integer, ByRef xs As Integer,
                                         ByVal Print_Flag As Boolean)
 
-        Dim MP As Mark_Property
+        Dim MP As Mark_Property = Nothing
 
         MP.ShapeNumber = 0
         MP.Tile = tp
@@ -2607,7 +2606,7 @@
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Shared Function GetScaleRect(ByRef g As Graphics, ByRef attrData As clsAttrData) As Rectangle
-        Dim P_Scl As clsAttrData.strScale_Attri
+        Dim P_Scl As clsAttrData.strScale_Attri = Nothing
         Dim SCST As Integer
         Dim scaleMax As String
         Dim sxy As Point
@@ -2785,7 +2784,7 @@
     ''' <remarks></remarks>
     Public Shared Sub Scale_Print(ByRef g As Graphics, ByRef attrData As clsAttrData)
 
-        Dim P_Scl As clsAttrData.strScale_Attri
+        Dim P_Scl As clsAttrData.strScale_Attri = Nothing
         Dim SCST As Integer
         Dim scaleMax As String
         Dim sxy As Point

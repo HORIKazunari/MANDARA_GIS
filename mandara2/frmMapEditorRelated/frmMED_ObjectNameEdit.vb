@@ -1,4 +1,4 @@
-﻿Public Class frmMED_ObjectNameEdit
+Public Class frmMED_ObjectNameEdit
     Dim CloseCancelF As Boolean
     Dim SearchSTR As String
     Dim MapData As clsMapData
@@ -42,7 +42,7 @@
         Return Me.ShowDialog
 
     End Function
-    Public Function GetResults()
+    Public Sub GetResults()
         With MapData
             For i As Integer = 0 To .Map.OBKNum - 1
                 With .ObjectKind(i)
@@ -66,7 +66,7 @@
                 End With
             Next
         End With
-    End Function
+    End Sub
 
 
 

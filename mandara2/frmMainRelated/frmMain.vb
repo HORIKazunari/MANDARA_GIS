@@ -1,4 +1,4 @@
-﻿'
+'
 ' GIS Software MANDARA
 ' Source Code File name  frmMain.vb
 '
@@ -3439,7 +3439,6 @@ End Sub
             form.Dispose()
         End If
     End Sub
-
     Private Sub mnuSymbolLocationSet_Click(sender As Object, e As EventArgs) Handles mnuSymbolLocationSet.Click, mnuLabelLocationSet.Click
         If attrData.TotalData.ViewStyle.Zahyo.Mode <> enmZahyo_mode_info.Zahyo_Ido_Keido Then
             MsgBox("地図データが緯度経度座標系でないと設定できません。", MsgBoxStyle.Exclamation)
@@ -3450,23 +3449,15 @@ End Sub
 
             Dim form As New frmMain_SetPositionFromData
 
-            ' 以下の５行のIF文に対し
-            ' 「BC43025 共有メンバー、定数メンバー、列挙型メンバー、
-            ' 　または入れ子にされた型にインスタンス経由でアクセスしています。正規の式は評価されません。」
-            ' と警告メッセージが出る。
-            ' 対処法がわからないので、とりあえず放置
-            ' Comment by HORI Kazunari at 2024/03/18
-            ' 
             If sender.Name = "mnuSymbolLocationSet" Then
-                form.ShowDialog(attrData, lay, form.enmChangeMode.symbol)
+                form.ShowDialog(attrData, lay, frmMain_SetPositionFromData.enmChangeMode.symbol)
             Else
-                form.ShowDialog(attrData, lay, form.enmChangeMode.label)
+                form.ShowDialog(attrData, lay, frmMain_SetPositionFromData.enmChangeMode.label)
             End If
 
             form.Close()
         Else
             MsgBox("現在のレイヤの種類では設定できません。", MsgBoxStyle.Exclamation)
-
         End If
     End Sub
 

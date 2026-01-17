@@ -1,4 +1,4 @@
-﻿Public Class frmMessage
+Public Class frmMessage
     Public Enum MessageType
         text = 1
         list = 2
@@ -31,7 +31,7 @@
     ''' <param name="RowNumberFlag">trueにすると左端に行番号がつく</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Overloads Function ShowDialog(ByVal Owner As IWin32Window, ByVal Title As String, ByVal ListData As List(Of String), _
+    Public Overloads Function ShowDialog(ByVal Owner As IWin32Window, ByVal Title As String, ByVal ListData As List(Of String),
                                          ByRef VariType() As VariantType, ByRef SortingFlag() As Boolean, ByVal RowNumberFlag As Boolean) As Windows.Forms.DialogResult
         Me.Text = Title
         btnCancel.Visible = True
@@ -102,6 +102,7 @@
         If ViewMode = MessageType.text Then
             Return TextBox.Text
         End If
+        Return String.Empty
     End Function
     ''' <summary>
     ''' テキスト形式でメッセージをモーダレス表示
@@ -136,7 +137,7 @@
     ''' <param name="SortingFlag">ヘッダの列数分の配列で、並べ替えをするか。Falseの場合列の並べ替えは無し、ヘッダの列数分の配列</param>
     ''' <param name="RowNumberFlag">trueにすると左端に行番号がつく</param>
     ''' <remarks></remarks>
-    Public Overloads Sub Show(ByVal Owner As Form, ByVal Title As String, ByVal ListData As List(Of String), _
+    Public Overloads Sub Show(ByVal Owner As Form, ByVal Title As String, ByVal ListData As List(Of String),
                                          ByRef VariType() As VariantType, ByRef SortingFlag() As Boolean, ByVal RowNumberFlag As Boolean)
         Me.Text = Title
         ktGrid.Visible = False

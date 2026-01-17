@@ -1,4 +1,4 @@
-﻿Public Class clsTime
+Public Class clsTime
     Public Shared Function Check_Duration_OK(ByVal duration1 As Start_End_Time_data, ByVal duration2 As Start_End_Time_data) As Boolean
         '期間１と期間２が重なっている場合にtrue
 
@@ -58,6 +58,7 @@
                     End If
                 End If
         End Select
+        Return False
     End Function
 
     ''' <summary>
@@ -150,7 +151,7 @@
                         End If
                     Else
                         Dim etime As DateTime = clsTime.getDateTime(duration.EndTime)
-                        If DateTime.Compare(stime, time) <= 0 And _
+                        If DateTime.Compare(stime, time) <= 0 And
                              DateTime.Compare(time, etime) <= 0 Then
                             Return True
                         Else
@@ -159,6 +160,7 @@
                     End If
             End Select
         End If
+        Return False
     End Function
     ''' ------------------------------------------------------------------------------
     ''' <summary>

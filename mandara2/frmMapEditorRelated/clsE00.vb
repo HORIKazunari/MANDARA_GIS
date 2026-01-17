@@ -1,4 +1,4 @@
-﻿Public Class clsE00
+Public Class clsE00
     Public Structure E00file_info
         Public FileName As String
         Public FullPath As String
@@ -448,7 +448,7 @@
     ''' <param name="filePoint"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Shared Function Get_INFO_Files(ByVal adata As String, ByRef NumOfAttributes As Integer, ByRef NumofDataRecords As Integer,
+    Private Shared Sub Get_INFO_Files(ByVal adata As String, ByRef NumOfAttributes As Integer, ByRef NumofDataRecords As Integer,
                                     ByRef PAT_Data() As pat_data_info, ByRef fileData As List(Of String),
                                     ByRef filePoint As Integer, ByRef TotalLen As Integer)
         Dim NumofTotalAttrubutes As Integer
@@ -495,7 +495,7 @@
             End If
         Next
         TotalLen = j
-    End Function
+    End Sub
 
     Public Shared Function MidB(ByVal stTarget As String, ByVal iStart As Integer, ByVal iByteSize As Integer) As String
         Dim hEncoding As System.Text.Encoding = System.Text.Encoding.GetEncoding("Shift_JIS")
