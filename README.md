@@ -1,8 +1,7 @@
 # MANDARA_GIS
 
 
-[![Build Status](https://github.com/HORIKazunari/MANDARA10_followup/workflows/Build%20MANDARA10/badge.svg)](https://github.com/HORIKazunari/MANDARA10_followup/actions)
-
+・現在、GitHub Actions は整備中です。
 
 このリポジトリは、
 谷　謙二氏が継続して開発された Windows GIS ソフトウェア MANDARA10を
