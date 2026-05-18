@@ -1,5 +1,19 @@
 # Copilot Instructions
 
 ## プロジェクト ガイドライン
-- This modernization effort should target .NET 10 in Visual Studio 2026, preserve both x64 and x86 builds, use git for local progress management, keep pushed repository contents minimal for reproducible builds, unify project naming to mandara, and treat the successful .NET 10 migration as version 11.0.
-- Align the old `mandara2.vbproj` with the current project configuration rather than ignoring or removing it.
+
+### 開発環境
+- Windows のみで作業すること。
+- Visual Studio 2026 を使用し、.NET 10 を対象とすること。
+- 文字コードと改行コードを統一して文字化けを防ぐこと（例: UTF-8 と改行の統一を推奨）。
+
+### ビルドとバージョン
+- x64 と x86 の両方のビルドを保持すること。
+- .NET 10 への移行が成功した時点をバージョン 11.0 として扱うこと。
+
+### リポジトリとファイル
+- ローカルの進捗管理には git を使用すること。main から作業ブランチ upgrade/dotnet10 を作成して進めること。
+- プッシュする内容は再現可能なビルドに必要な最小限のファイルに限定すること。
+- プロジェクト名を mandara に統一すること。
+- 古い mandara2.vbproj を無視または削除するのではなく、現在のプロジェクト設定に合わせて更新すること。
+- .gitignore や .vbproj/.vb の変更作業は、まずユーザーがエディタで手作業で行う方針で進めること。
