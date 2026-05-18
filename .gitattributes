@@ -1,4 +1,36 @@
 * text=auto
-*.vb text eol=crlf
-*.sln text eol=crlf
-*.vbproj text eol=crlf
+
+# Windows-first text normalization for this repository
+*.sln           text eol=crlf
+*.vbproj        text eol=crlf
+*.vb            text eol=crlf
+*.Designer.vb   text eol=crlf
+*.resx          text eol=crlf
+*.config        text eol=crlf
+*.xml           text eol=crlf
+*.json          text eol=crlf
+*.props         text eol=crlf
+*.targets       text eol=crlf
+*.cmd           text eol=crlf
+*.bat           text eol=crlf
+*.ps1           text eol=crlf
+*.md            text eol=crlf
+*.txt           text eol=crlf
+*.gitignore     text eol=crlf
+*.gitattributes text eol=crlf
+*.editorconfig  text eol=crlf
+
+# Visual Studio and binary assets
+*.suo           binary
+*.user          binary
+*.cache         binary
+*.dll           binary
+*.exe           binary
+*.pdb           binary
+*.zip           binary
+*.ico           binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.bmp           binary
