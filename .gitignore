@@ -1,35 +1,39 @@
-# Visual Studio
+# ------------------------------------------------------------
+# MANDARA_GIS - Git ignore rules
+# Windows + Visual Studio 2026 + VB / WinForms
+# ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# Visual Studio user / workspace files
+# ------------------------------------------------------------
 .vs/
-*.user
 *.suo
+*.user
 *.userosscache
 *.sln.docstates
 
-# Build results
+# ------------------------------------------------------------
+# Build outputs
+# ------------------------------------------------------------
 [Dd]ebug/
-[Dd]ebugPublic/
 [Rr]elease/
-[Rr]eleases/
-x64/
 x86/
-[Aa]rm/
-[Aa]rm64/
-bld/
+x64/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Ll]ogs/
 
-# Visual Studio cache files
+# ------------------------------------------------------------
+# Cache / temporary files
+# ------------------------------------------------------------
 *.cache
 !?*.[Cc]ache/
-
-# NuGet Packages
-*.nupkg
-*.snupkg
-**/packages/*
-!**/packages/build/
-
-# Build results
+*.log
+*.tmp
+*.tmp_proj
 *.ilk
 *.meta
 *.obj
@@ -44,87 +48,67 @@ bld/
 *.tlb
 *.tli
 *.tlh
-*.tmp
-*.tmp_proj
-*_wpftmp.csproj
-*.log
-*.vspscc
-*.vssscc
-.builds
 *.pidb
 *.svclog
-*.scc
 
-# Backup & report files
+# ------------------------------------------------------------
+# Visual Studio / MSBuild generated reports and backups
+# ------------------------------------------------------------
 _UpgradeReport_Files/
 Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
 *.rptproj.bak
+*.builds
 
-# MANDARA specific
-*.mdx
-*.mda
+# ------------------------------------------------------------
+# Source control binding / legacy IDE files
+# ------------------------------------------------------------
+*.vspscc
+*.vssscc
+*.scc
 
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
-
-# Visual Studio cache/options
-.vs/
-
-# NuGet Packages
-*.nupkg
-*.snupkg
-**/packages/*
-!**/packages/build/
-
+# ------------------------------------------------------------
 # Visual Studio profiler
+# ------------------------------------------------------------
 *.psess
 *.vsp
 *.vspx
 *.sap
 
-# Power Shell Scripts for Error Correction
-*.ps1
-
+# ------------------------------------------------------------
 # ReSharper
+# ------------------------------------------------------------
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin
-$RECYCLE.BIN/
-
+# ------------------------------------------------------------
 # VS Code
+# ------------------------------------------------------------
 .vscode/
 
-# Mac
+# ------------------------------------------------------------
+# Windows / macOS filesystem noise
+# ------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 .DS_Store
 
+# ------------------------------------------------------------
+# NuGet
+# Keep current packages folder strategy for now.
+# Do not ignore packages/ until PackageReference migration is done.
+# ------------------------------------------------------------
+*.nupkg
+*.snupkg
+
+# ------------------------------------------------------------
+# MANDARA-specific generated / runtime data
+# Adjust later if some of these must be versioned.
+# ------------------------------------------------------------
+*.mdx
+*.mda
